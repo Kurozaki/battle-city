@@ -1,0 +1,19 @@
+{
+	"enemies": [
+		{
+			"typeId": 1,
+			"resId": "enemy-1",
+			"durability": 4
+		},
+		{
+			"typeId": 2,
+			"resId": "enemy-2",
+			"durability": 4
+		},
+		{
+			"typeId": 3,
+			"resId": "enemy-3",
+			"durability": 4
+		}
+	]
+}
