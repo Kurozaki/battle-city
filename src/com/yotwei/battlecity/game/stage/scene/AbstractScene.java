@@ -7,6 +7,7 @@ import java.awt.*;
 /**
  * Created by YotWei on 2019/2/26.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractScene {
 
     private GameContext context;

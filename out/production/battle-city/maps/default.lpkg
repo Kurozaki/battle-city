@@ -8,6 +8,7 @@
 	"levels": [
 		{
 			"caption": "first level",
+			"bg_pic": "bg-1",
 			"players": {
 				"p1": {
 					"x": 224,
@@ -64,6 +65,7 @@
 		},
 		{
 			"caption": "second level",
+			"bg_pic": "bg-1",
 			"players": {
 				"p1": {
 					"x": 224,

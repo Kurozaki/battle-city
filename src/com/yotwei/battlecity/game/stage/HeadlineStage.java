@@ -4,6 +4,7 @@ import com.yotwei.battlecity.framework.IStageHandleContext;
 import com.yotwei.battlecity.framework.KeyInput;
 import com.yotwei.battlecity.framework.stage.IStage;
 import com.yotwei.battlecity.util.Constant;
+import com.yotwei.battlecity.util.GraphicUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +39,15 @@ public class HeadlineStage
 
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Constant.WND_SIZE.width, Constant.WND_SIZE.height);
+
+        GraphicUtil.clearScreen(g, Color.BLACK);
+
+        GraphicUtil.drawCenterText(
+                g,
+                new Font("Consolas", Font.BOLD, 36),
+                Color.WHITE,
+                "Headline");
+
     }
 
     @Override

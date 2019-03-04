@@ -25,6 +25,8 @@ public class GameStage extends GameContext
     private AbstractScene[] scenesArray;
     private int sceneCursor;
 
+    private boolean switchScene;
+
     @Override
     public void onInit(IStageHandleContext ctx) {
 
@@ -72,6 +74,9 @@ public class GameStage extends GameContext
     @Override
     public void update(IStageHandleContext ctx) {
 
+        // set switch scene flag to false
+        switchScene = false;
+
         // get current handling scene
         AbstractScene scene = scenesArray[sceneCursor];
 
@@ -79,18 +84,24 @@ public class GameStage extends GameContext
         scene.updateScene();
 
         if (scene.isSceneFinished()) {
-
-            // get next scene cursor and reset next scene
-            sceneCursor = (sceneCursor + 1) % scenesArray.length;
-            scenesArray[sceneCursor].resetScene();
+            // set switch scene to true
+            switchScene = true;
         }
     }
 
     @Override
     public void draw(Graphics2D g) {
+
         // draw current handling scene
         AbstractScene scene = scenesArray[sceneCursor];
         scene.drawScene(g);
+
+        if (switchScene) {
+
+            // get next scene cursor and reset next scene
+            sceneCursor = (sceneCursor + 1) % scenesArray.length;
+            scenesArray[sceneCursor].resetScene();
+        }
     }
 
     @Override

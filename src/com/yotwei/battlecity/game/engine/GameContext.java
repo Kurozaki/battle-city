@@ -1,9 +1,11 @@
 package com.yotwei.battlecity.game.engine;
 
 import com.yotwei.battlecity.game.level.LevelPackage;
+import com.yotwei.battlecity.game.player.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -14,14 +16,32 @@ public abstract class GameContext {
 
     private static final Logger logger = LoggerFactory.getLogger("GameContext");
 
-    private LevelPackage levelPackage;
+ //   private LevelPackage levelPackage;
     private Iterator<Map.Entry<String, LevelPackage.LevelData>> levelIterator;
+
     private LevelPackage.LevelData levelDataCurrent;
+    private Map<String, Player> players;
 
     protected void setLevelPackage(LevelPackage levelPackage) {
-        this.levelPackage = levelPackage;
-        this.levelIterator = levelPackage.getLevels().entrySet().iterator();
+
+        // assigned levelIterator
+        levelIterator = levelPackage.getLevels().entrySet().iterator();
+
+        //
+        // create players
+        //
+        players = new HashMap<>();
+        for (LevelPackage.PlayerData playerData : levelPackage.getPlayers().values()) {
+            Player player = new
+                    Player(playerData.getName(), playerData.getLives());
+            players.put(playerData.getName(), player);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("create player '{}'", playerData.getName());
+            }
+        }
     }
+
 
     /**
      * to switch levelDataCurrent instance
@@ -41,5 +61,9 @@ public abstract class GameContext {
 
     public LevelPackage.LevelData getCurrentLevel() {
         return levelDataCurrent;
+    }
+
+    public Player getPlayer(String name) {
+        return players.get(name);
     }
 }

@@ -2,7 +2,9 @@ package com.yotwei.battlecity.game.datastruct;
 
 import com.yotwei.battlecity.game.object.GameObject;
 
+import java.awt.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -28,4 +30,15 @@ public class DefaultGameObjectGroup<_ObjectType extends GameObject>
         objectSet.forEach(consumer);
         return objectSet.size();
     }
+
+    @Override
+    public Set<_ObjectType> retrieve(Rectangle retArea) {
+        Set<_ObjectType> resultSet = new HashSet<>();
+        for (_ObjectType anObject : objectSet) {
+            if (anObject.getHitbox().intersects(retArea))
+                resultSet.add(anObject);
+        }
+        return resultSet;
+    }
+
 }

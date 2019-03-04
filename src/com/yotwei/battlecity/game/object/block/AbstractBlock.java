@@ -3,7 +3,7 @@ package com.yotwei.battlecity.game.object.block;
 import com.yotwei.battlecity.game.engine.ResourcePackage;
 import com.yotwei.battlecity.game.object.GameObject;
 import com.yotwei.battlecity.game.object.LevelContext;
-import com.yotwei.battlecity.game.object.Physic;
+import com.yotwei.battlecity.game.object.properties.Physic;
 import com.yotwei.battlecity.util.Constant;
 
 import java.awt.*;
@@ -12,12 +12,12 @@ import java.awt.image.BufferedImage;
 /**
  * Created by YotWei on 2019/2/25.
  */
-public abstract class AbstractBlock extends GameObject
-        implements Physic.CollideAble<Rectangle> {
-
-    protected final Rectangle hitbox;
+@SuppressWarnings("WeakerAccess")
+public abstract class AbstractBlock extends GameObject {
 
     private int typeId;
+
+    protected final Rectangle hitbox;
 
     /*
      * members for drawing
@@ -32,23 +32,15 @@ public abstract class AbstractBlock extends GameObject
 
         // all block size is UNIT_SIZE
         hitbox = new Rectangle(Constant.UNIT_SIZE);
-
-        // get image resource by blockTypeId
-        image = ResourcePackage.getImage("block-" + blockTypeId);
-
-        if (image.getHeight() != hitbox.height
-                || image.getWidth() % hitbox.width != 0
-                || image.getWidth() < hitbox.width) {
-            throw new RuntimeException("bad image resource: block-" + blockTypeId);
-        }
-        framesOfAnimate = image.getWidth() / hitbox.width;
     }
 
-    @Override
-    public Rectangle getHitbox() {
-        return hitbox;
-    }
-
+    /*
+     * -------------------------------------------------------------------------------------
+     * <p>
+     * method implements from {@link com.yotwei.battlecity.game.object.properties.DrawAble}
+     * <p>
+     * -------------------------------------------------------------------------------------
+     */
     @Override
     public void draw(Graphics2D g) {
 
@@ -72,11 +64,62 @@ public abstract class AbstractBlock extends GameObject
     }
 
     @Override
-    public void update() {
+    public int getDrawPriority() {
+        return 0;
+    }
+
+    /*
+     * -------------------------------------------------------------------------------------
+     * <p>
+     * methods implements from {@link com.yotwei.battlecity.game.object.properties.LifeCycle}
+     * <p>
+     * -------------------------------------------------------------------------------------
+     */
+    @Override
+    public void onActive() {
+        // get image resource by blockTypeId
+        image = ResourcePackage.getImage("block-" + typeId);
+
+        if (image.getHeight() != hitbox.height
+                || image.getWidth() % hitbox.width != 0
+                || image.getWidth() < hitbox.width) {
+            throw new RuntimeException("bad image resource: block-" + typeId);
+        }
+        framesOfAnimate = image.getWidth() / hitbox.width;
+
+        // using "Block-" + [CLASS_NAME] as tag
+        setTag("Block-" + getClass().getSimpleName());
     }
 
     @Override
-    public void onCollide(Physic.CollideAble<? extends Shape> anotherObject) {
+    public void update() {
 
+    }
+
+    @Override
+    public void onInactive() {
+
+    }
+
+    /*
+     * -------------------------------------------------------------------------------------
+     * <p>
+     * methods implements from {@link Physic}
+     * <p>
+     * -------------------------------------------------------------------------------------
+     */
+    @Override
+    public void onCollide(Physic<? extends Shape> anotherObject) {
+
+    }
+
+    @Override
+    public void onTouchBound(Rectangle bound) {
+
+    }
+
+    @Override
+    public Rectangle getHitbox() {
+        return hitbox;
     }
 }

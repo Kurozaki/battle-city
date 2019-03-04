@@ -10,4 +10,9 @@ public class Grass extends AbstractBlock {
     protected Grass(LevelContext lvlCtx, int blockTypeId) {
         super(lvlCtx, blockTypeId);
     }
+
+    @Override
+    public int getDrawPriority() {
+        return 2;
+    }
 }

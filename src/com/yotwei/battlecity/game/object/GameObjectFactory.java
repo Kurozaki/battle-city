@@ -69,6 +69,9 @@ public class GameObjectFactory {
         // don't forget to set block's location
         block.getHitbox().setLocation(x, y);
 
+        // active the block
+        block.onActive();
+
         return block;
     }
 

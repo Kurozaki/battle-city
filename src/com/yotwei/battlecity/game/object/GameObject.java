@@ -1,21 +1,34 @@
 package com.yotwei.battlecity.game.object;
 
+import com.yotwei.battlecity.game.object.properties.DrawAble;
+import com.yotwei.battlecity.game.object.properties.LifeCycle;
+import com.yotwei.battlecity.game.object.properties.Physic;
+
 import java.awt.*;
 
 /**
  * Created by YotWei on 2019/2/25.
  */
-public abstract class GameObject {
+@SuppressWarnings({"WeakerAccess", "unused"})
+public abstract class GameObject
+        implements Physic<Rectangle>, LifeCycle, DrawAble {
 
-    private static long idGenerator = 1000;
+    private static long idGenerator = 10000L;
 
     protected GameObject(LevelContext lvlCtx) {
         levelContext = lvlCtx;
 
         // unique id generate by increasing long integer
         uid = idGenerator++;
+
+        isActive = true;
     }
 
+    /*
+     * a LevelContext reference
+     * every game object must associate with a level context
+     * it's a final field so it must be assigned at constructor
+     */
     private final LevelContext levelContext;
 
     /*
@@ -29,25 +42,36 @@ public abstract class GameObject {
      */
     private String tag;
 
+    /*
+     * a flag to tell if this game object is active
+     * the flag is set to true at constructor
+     */
     private boolean isActive;
 
-    public long getUID() {
+
+    // ----------------------------------------------------------
+    //
+    // some getters and setters
+    // all of them are not to be overridden
+    //
+    // ----------------------------------------------------------
+    public final long getUID() {
         return uid;
     }
 
-    public LevelContext getLevelContext() {
+    public final LevelContext getLevelContext() {
         return levelContext;
     }
 
-    public void setTag(String tagStr) {
+    public final void setTag(String tagStr) {
         tag = tagStr;
     }
 
-    public String getTag() {
+    public final String getTag() {
         return tag;
     }
 
-    public boolean isActive() {
+    public final boolean isActive() {
         return isActive;
     }
 
@@ -55,27 +79,25 @@ public abstract class GameObject {
         isActive = active;
     }
 
+
+    // ----------------------------------------------------------
+    //
+    // rewrite hashCode() and equals() method of GameObject
+    // uid is a unique long value in GameObject instance
+    // it also can be the hash code of an instance of GameObject
+    //
+    // they're not allow to be overridden
+    //
+    // ----------------------------------------------------------
+
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return (int) uid;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         return obj instanceof GameObject &&
                 this.uid == ((GameObject) obj).uid;
     }
-
-    /**
-     * object update every frame
-     */
-    public abstract void update();
-
-    /**
-     * object draw every frame
-     *
-     * @param g a {@link Graphics2D} instance
-     */
-    public abstract void draw(Graphics2D g);
-
 }
