@@ -27,7 +27,11 @@ public class DefaultGameObjectGroup<_ObjectType extends GameObject>
 
     @Override
     public int each(Consumer<_ObjectType> consumer) {
-        objectSet.forEach(consumer);
+        objectSet.forEach(anObject -> {
+            if (anObject.isActive()) {
+                consumer.accept(anObject);
+            }
+        });
         return objectSet.size();
     }
 
@@ -35,7 +39,7 @@ public class DefaultGameObjectGroup<_ObjectType extends GameObject>
     public Set<_ObjectType> retrieve(Rectangle retArea) {
         Set<_ObjectType> resultSet = new HashSet<>();
         for (_ObjectType anObject : objectSet) {
-            if (anObject.getHitbox().intersects(retArea))
+            if (anObject.isActive() && anObject.getHitbox().intersects(retArea))
                 resultSet.add(anObject);
         }
         return resultSet;

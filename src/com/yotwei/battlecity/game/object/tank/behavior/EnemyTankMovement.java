@@ -2,7 +2,7 @@ package com.yotwei.battlecity.game.object.tank.behavior;
 
 import com.yotwei.battlecity.game.object.GameObject;
 import com.yotwei.battlecity.game.object.LevelContext;
-import com.yotwei.battlecity.game.object.tank.AbstractTank;
+import com.yotwei.battlecity.game.object.properties.Direction;
 import com.yotwei.battlecity.game.object.tank.EnemyTank;
 import com.yotwei.battlecity.util.Constant;
 
@@ -15,25 +15,25 @@ import java.util.List;
  */
 
 @SuppressWarnings("WeakerAccess")
-public class EnemyTankBehavior extends ITankBehavior<EnemyTank> {
+public class EnemyTankMovement extends AbstractTankMovement<EnemyTank> {
 
-    private Map<AbstractTank.Direction, Rectangle> detectBoxes;
+    private Map<Direction, Rectangle> detectBoxes;
 
     private LevelContext.RetrieveFilter<GameObject> filter = anObject -> true;
     private Random rand;
     private int ticker;
 
-    protected EnemyTankBehavior(EnemyTank tank) {
+    protected EnemyTankMovement(EnemyTank tank) {
         super(tank);
 
         //
         // initialize detect boxes
         //
-        detectBoxes = new EnumMap<>(AbstractTank.Direction.class);
-        for (AbstractTank.Direction dir : AbstractTank.Direction.values()) {
+        detectBoxes = new EnumMap<>(Direction.class);
+        for (Direction dir : Direction.values()) {
             Rectangle box;
-            if (dir == AbstractTank.Direction.LEFT
-                    || dir == AbstractTank.Direction.RIGHT) {
+            if (dir == Direction.LEFT
+                    || dir == Direction.RIGHT) {
                 box = new Rectangle(2, Constant.UNIT_SIZE.height + 2);
             } else {
                 box = new Rectangle(Constant.UNIT_SIZE.width + 2, 2);
@@ -46,7 +46,7 @@ public class EnemyTankBehavior extends ITankBehavior<EnemyTank> {
 
     private void updateDetectBoxes(Rectangle tankHitbox) {
 
-        for (Map.Entry<AbstractTank.Direction, Rectangle> entry : detectBoxes.entrySet()) {
+        for (Map.Entry<Direction, Rectangle> entry : detectBoxes.entrySet()) {
 
             Rectangle detBox = entry.getValue();
 
@@ -83,7 +83,7 @@ public class EnemyTankBehavior extends ITankBehavior<EnemyTank> {
     }
 
     @Override
-    public AbstractTank.Direction nextMoveDirection() {
+    public Direction nextMoveDirection() {
 
         EnemyTank tank = getAccessTank();
 
@@ -100,13 +100,13 @@ public class EnemyTankBehavior extends ITankBehavior<EnemyTank> {
         // the opposite direction has lowest priority to be selected
         // it only will be selected when the other 3 direction is unavailable
         //
-        AbstractTank.Direction nextDirection, oppositeDirection = null;
-        List<AbstractTank.Direction> selectableDirections = new ArrayList<>(4);
+        Direction nextDirection, oppositeDirection = null;
+        List<Direction> selectableDirections = new ArrayList<>(4);
 
-        for (Map.Entry<AbstractTank.Direction, Rectangle> entry : detectBoxes.entrySet()) {
-            AbstractTank.Direction dir = entry.getKey();
+        for (Map.Entry<Direction, Rectangle> entry : detectBoxes.entrySet()) {
+            Direction dir = entry.getKey();
 
-            if (AbstractTank.Direction.isOpposite(dir, tank.getDirection())) {
+            if (Direction.isOpposite(dir, tank.getDirection())) {
                 // set opposite direction
                 oppositeDirection = dir;
 

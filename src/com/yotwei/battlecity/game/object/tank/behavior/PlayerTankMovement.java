@@ -1,5 +1,6 @@
 package com.yotwei.battlecity.game.object.tank.behavior;
 
+import com.yotwei.battlecity.game.object.properties.Direction;
 import com.yotwei.battlecity.game.object.tank.AbstractTank;
 import com.yotwei.battlecity.game.object.tank.PlayerTank;
 
@@ -8,25 +9,25 @@ import com.yotwei.battlecity.game.object.tank.PlayerTank;
  * Created by YotWei on 2019/3/1.
  */
 @SuppressWarnings("WeakerAccess")
-public class PlayerTankBehavior extends ITankBehavior<PlayerTank> {
+public class PlayerTankMovement extends AbstractTankMovement<PlayerTank> {
 
-    protected PlayerTankBehavior(PlayerTank tank) {
+    protected PlayerTankMovement(PlayerTank tank) {
         super(tank);
     }
 
     @Override
-    public AbstractTank.Direction nextMoveDirection() {
+    public Direction nextMoveDirection() {
 
         PlayerTank.ControlKeys ck = getAccessTank().getControlKeys();
 
         if (ck.isRight()) {
-            return AbstractTank.Direction.RIGHT;
+            return Direction.RIGHT;
         } else if (ck.isLeft()) {
-            return AbstractTank.Direction.LEFT;
+            return Direction.LEFT;
         } else if (ck.isUp()) {
-            return AbstractTank.Direction.UP;
+            return Direction.UP;
         } else if (ck.isDown()) {
-            return AbstractTank.Direction.DOWN;
+            return Direction.DOWN;
         } else {
             return null;
         }

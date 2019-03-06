@@ -15,15 +15,6 @@ public abstract class GameObject
 
     private static long idGenerator = 10000L;
 
-    protected GameObject(LevelContext lvlCtx) {
-        levelContext = lvlCtx;
-
-        // unique id generate by increasing long integer
-        uid = idGenerator++;
-
-        isActive = true;
-    }
-
     /*
      * a LevelContext reference
      * every game object must associate with a level context
@@ -47,6 +38,13 @@ public abstract class GameObject
      * the flag is set to true at constructor
      */
     private boolean isActive;
+
+    protected GameObject(LevelContext lvlCtx) {
+        levelContext = lvlCtx;
+
+        // unique id generate by increasing long integer
+        uid = idGenerator++;
+    }
 
 
     // ----------------------------------------------------------
@@ -76,7 +74,14 @@ public abstract class GameObject
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        if (isActive != active) {
+            if (!isActive) {
+                onActive();
+            } else {
+                onInactive();
+            }
+            isActive = active;
+        }
     }
 
 

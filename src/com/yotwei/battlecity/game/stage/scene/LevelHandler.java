@@ -8,17 +8,21 @@ import com.yotwei.battlecity.game.object.GameObjectFactory;
 import com.yotwei.battlecity.game.object.LevelContext;
 import com.yotwei.battlecity.game.level.LevelPackage;
 import com.yotwei.battlecity.game.object.block.AbstractBlock;
+import com.yotwei.battlecity.game.object.bullet.AbstractBullet;
 import com.yotwei.battlecity.game.object.properties.DrawAble;
 import com.yotwei.battlecity.game.object.properties.LifeCycle;
+import com.yotwei.battlecity.game.object.special.SpecialObject;
+import com.yotwei.battlecity.game.object.special.TankCreator;
 import com.yotwei.battlecity.game.object.tank.AbstractTank;
 import com.yotwei.battlecity.game.object.tank.EnemyTank;
 import com.yotwei.battlecity.game.object.tank.PlayerTank;
+import com.yotwei.battlecity.game.player.Player;
 import com.yotwei.battlecity.util.Constant;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by YotWei on 2019/2/27.
@@ -27,37 +31,92 @@ public class LevelHandler extends AbstractScene
         implements LevelContext {
 
     /*
-     * a Rectangle instance
-     * stands for the bound of level
+     * --------------------------------------------------------
+     *
+     * members for enemy control
+     *
+     * --------------------------------------------------------
      */
-    private final Rectangle levelBoundRect = new Rectangle(Constant.WND_SIZE);
+    private static final int ENEMY_DEQUEUE_PERIOD = 120;
+
+    private Queue<TankCreator<EnemyTank>> enemyCreatorQueue;
+
+    private int enemyOnScreenCount;
+    private int enemyOnScreenCountMax;
+    private int enemyOnceDequeueCountMax;
+
+    private int enemyDequeueTicker;
 
     /*
+     * --------------------------------------------------------
+     *
+     * members for control level global status
+     *
+     * --------------------------------------------------------
+     */
+    private Queue<Event> eventQueue;
+
+    /**
      * frameTicker increases frame by frame
      * set to 0 when level switched
      */
     private int frameTicker;
 
-    private Map<String, IGameObjectGroup<? extends GameObject>> gameObjectGroups;
+    /**
+     * a Rectangle instance
+     * stands for the bound of level
+     */
+    private final Rectangle levelBoundRect = new Rectangle(Constant.WND_SIZE);
 
-    /*
+
+    /**
      * background image of level
      * it is tiled by a source image
      */
     private BufferedImage backgroundImage;
 
-    private IGameObjectGroup<AbstractBlock> blockGroup = IGameObjectGroup.create("Grid1");
-    private IGameObjectGroup<AbstractTank> tankGroup = IGameObjectGroup.create("QuadTree");
+    /*
+     * --------------------------------------------------------
+     *
+     * members for storing game objects
+     *
+     * --------------------------------------------------------
+     */
+    private Map<String, IGameObjectGroup<? extends GameObject>> gameObjectGroups;
+
+    private IGameObjectGroup<AbstractBlock> blockGroup;
+    private IGameObjectGroup<AbstractTank> tankGroup;
+    private IGameObjectGroup<AbstractBullet> bulletGroup;
+    private IGameObjectGroup<SpecialObject> specialObjectGroup;
 
     public LevelHandler(GameContext context) {
         super(context);
     }
 
+    /*
+     * -------------------------------------------------------
+     *
+     * methods implements from {@link AbstractScene}
+     *
+     * -------------------------------------------------------
+     */
     @Override
     public void resetScene() {
 
-        // set frameTicker to 0
         frameTicker = 0;
+
+        eventQueue = new LinkedList<>();
+        enemyDequeueTicker = ENEMY_DEQUEUE_PERIOD;
+
+        //
+        // re initialize all game object group
+        //
+        gameObjectGroups = new HashMap<>();
+        tankGroup = IGameObjectGroup.create("QuadTree");
+        blockGroup = IGameObjectGroup.create("Grid");
+        bulletGroup = IGameObjectGroup.create("QuadTree");
+        specialObjectGroup = IGameObjectGroup.create("Default");
+
 
         // get current handing level data
         LevelPackage.LevelData levelDatCurrent = getGameContext().getCurrentLevel();
@@ -116,37 +175,71 @@ public class LevelHandler extends AbstractScene
             }
         }
 
+        for (Map.Entry<String, Point> entry :
+                levelDatCurrent.getPlayersStartCoord().entrySet()) {
+
+            String pname = entry.getKey();
+            Point point = entry.getValue();
+
+            Player player = getGameContext().getPlayer(pname);
+            PlayerTank tank = GameObjectFactory.createPlayerTank(this, player.getId());
+
+            TankCreator<PlayerTank> tankCreator =
+                    GameObjectFactory.createTankCreator(this, point.x, point.y, tank);
+
+            specialObjectGroup.add(tankCreator);
+        }
+
+
+        enemyOnScreenCountMax = levelDatCurrent.getEnemyOnScreenCountMax();
 
         //
-        // TODO: 2019/3/4 test code, delete later
+        // fill enemyCreatorQueue
         //
-        PlayerTank tank = new PlayerTank(this, 1);
-        tank.setControlKeys(new PlayerTank.ControlKeys(
-                KeyEvent.VK_W,
-                KeyEvent.VK_S,
-                KeyEvent.VK_A,
-                KeyEvent.VK_D,
-                0,
-                0
-        ));
-        tank.getHitbox().setLocation(0, 32);
-        tank.onActive();
+        enemyCreatorQueue = new LinkedList<>();
+        int selectedIndex = 0;
+        List<Point> enemyCreatorSelectablePointList = Arrays.asList(
+                new Point(0, 0),
+                new Point(304, 0),
+                new Point(608, 0)
+        );
 
-        tankGroup.add(tank);
+        enemyOnceDequeueCountMax = enemyCreatorSelectablePointList.size();
 
-        EnemyTank enemyTank = new EnemyTank(this, 2);
-        enemyTank.getHitbox().setLocation(32, 0);
-        enemyTank.onActive();
-        tankGroup.add(enemyTank);
+        for (Map.Entry<Integer, Integer> entry :
+                levelDatCurrent.getEnemyTypesCount().entrySet()) {
 
+            Integer id = entry.getKey();
+            Integer count = entry.getValue();
+
+            for (int i = 0; i < count; i++) {
+
+                EnemyTank enemyTank = GameObjectFactory.createEnemyTank(this, id);
+                Point selectedPoint = enemyCreatorSelectablePointList.get(selectedIndex);
+
+                TankCreator<EnemyTank> anEnemyCreator = GameObjectFactory.createTankCreator(
+                        this,
+                        selectedPoint.x,
+                        selectedPoint.y,
+                        enemyTank);
+                enemyCreatorQueue.add(anEnemyCreator);
+
+                if (++selectedIndex == enemyCreatorSelectablePointList.size()) {
+                    Collections.shuffle(enemyCreatorSelectablePointList);
+                    selectedIndex = 0;
+                }
+            }
+        }
 
         //
-        // init GameObject Groups
-        // register all IGameObjectGroup instance to gameObjectGroup
+        // initialize GameObject Groups
+        // then register all IGameObjectGroup instance to gameObjectGroup
         //
         gameObjectGroups = new HashMap<>();
         gameObjectGroups.put("blockGroup", blockGroup);
         gameObjectGroups.put("tankGroup", tankGroup);
+        gameObjectGroups.put("bulletGroup", bulletGroup);
+        gameObjectGroups.put("specialObjectGroup", specialObjectGroup);
     }
 
     @Override
@@ -154,15 +247,130 @@ public class LevelHandler extends AbstractScene
 
         frameTicker++;
 
-        //
-        // update game objects group by group
-        //
+        updateGameObjectsGroupBuGroup();
+        handleGameObjectsCollision();
+
+        handleEnemyCreators();
+
+        handleEventQueue();
+    }
+
+
+    @Override
+    public void drawScene(Graphics2D g) {
+
+        // draw background
+        g.drawImage(backgroundImage, 0, 0, null);
+
+        // draw game objects
+        drawGameObjects(g);
+    }
+
+
+    @Override
+    public boolean isSceneFinished() {
+        return false;
+    }
+
+    /*
+     * -------------------------------------------------------
+     *
+     * method implements from {@link LevelContext}
+     *
+     * -------------------------------------------------------
+     */
+    @Override
+    public int getFrameTicker() {
+        return frameTicker;
+    }
+
+    @Override
+    public Rectangle getLevelBound() {
+        return levelBoundRect;
+    }
+
+    @Override
+    public Set<GameObject> retrieveGameObject(
+            Rectangle retrieveArea,
+            Set<String> retrieveGroupNames,
+            RetrieveFilter<GameObject> filter) {
+
+        Set<GameObject> resultSet = new HashSet<>();
+
+        if (retrieveGroupNames == null) {
+            retrieveGroupNames = gameObjectGroups.keySet();
+
+        }
+        for (String groupName : retrieveGroupNames) {
+            Set<? extends GameObject> retSet =
+                    gameObjectGroups.get(groupName).retrieve(retrieveArea);
+            for (GameObject anObject : retSet) {
+                if (filter.filter(anObject))
+                    resultSet.add(anObject);
+            }
+        }
+        return resultSet;
+    }
+
+    @Override
+    public void triggerEvent(Event ev) {
+        eventQueue.add(ev);
+    }
+
+    /*
+     * -------------------------------------------------------
+     *
+     * methods for handing event queue
+     *
+     * -------------------------------------------------------
+     */
+    private void handleEventQueue() {
+        while (!eventQueue.isEmpty()) {
+            Event ev = eventQueue.poll();
+
+            switch (ev.evTag) {
+                case "addObject":
+                    handleAddObjectEvent((GameObject) ev.dat[0]);
+                    break;
+
+                case "enemyDeath":
+                    handleEnemyDeathEvent();
+                    break;
+
+                default:
+            }
+        }
+    }
+
+    private void handleAddObjectEvent(GameObject anObject) {
+        if (anObject instanceof AbstractTank) {
+            tankGroup.add((AbstractTank) anObject);
+        } else if (anObject instanceof AbstractBullet) {
+            bulletGroup.add(((AbstractBullet) anObject));
+        }
+    }
+
+    private void handleEnemyDeathEvent() {
+        enemyOnScreenCount--;
+    }
+
+    /*
+     * -------------------------------------------------------
+     *
+     * assistant methods for updateScene()
+     *
+     * -------------------------------------------------------
+     */
+
+    private void updateGameObjectsGroupBuGroup() {
         for (Map.Entry<String, IGameObjectGroup<? extends GameObject>> entry :
                 gameObjectGroups.entrySet()) {
             IGameObjectGroup<? extends GameObject> objectGroup = entry.getValue();
             objectGroup.each(LifeCycle::update);
         }
+    }
 
+    private void handleGameObjectsCollision() {
         //
         // tank in bound check
         //
@@ -200,23 +408,45 @@ public class LevelHandler extends AbstractScene
             for (AbstractTank anotherTank : collideTankSet) {
                 if (anotherTank == tank)
                     continue;
-                anotherTank.onCollide(tank);
+
+                // invoke onCollide() method
+                tank.onCollide(anotherTank);
             }
         });
 
-        // TODO: 2019/3/4 check bullet collide with tanks and blocks
-
     }
 
-    @Override
-    public void drawScene(Graphics2D g) {
+    private void handleEnemyCreators() {
+        if (enemyDequeueTicker++ < ENEMY_DEQUEUE_PERIOD)
+            return;
 
-        // draw background
-        g.drawImage(backgroundImage, 0, 0, null);
+        enemyDequeueTicker = 0;
 
-        // draw game objects
-        drawGameObjects(g);
+        //
+        // dequeue enemy creators in queue
+        //
+        int dequeueCount = Math.min(
+                enemyOnScreenCountMax - enemyOnScreenCount,
+                enemyOnceDequeueCountMax);
+
+        for (int i = 0; i < dequeueCount; i++) {
+            TankCreator<EnemyTank> creator = enemyCreatorQueue.poll();
+            if (creator == null) {
+                // TODO: 2019/3/6 handle all enemy clear
+                break;
+            }
+            specialObjectGroup.add(creator);
+            enemyOnScreenCount++;
+        }
     }
+
+    /*
+     * -------------------------------------------------------
+     *
+     * assistant methods for drawScene()
+     *
+     * -------------------------------------------------------
+     */
 
     /**
      * draw according to the drawPriority of GameObject
@@ -236,51 +466,5 @@ public class LevelHandler extends AbstractScene
         while (!drawQueue.isEmpty()) {
             drawQueue.poll().draw(g);
         }
-    }
-
-    @Override
-    public boolean isSceneFinished() {
-        return false;
-    }
-
-    /**
-     * -------------------------------------------------------
-     * <p>
-     * method implements from {@link LevelContext}
-     * <p>
-     * -------------------------------------------------------
-     */
-    @Override
-    public int getFrameTicker() {
-        return frameTicker;
-    }
-
-    @Override
-    public Rectangle getLevelBound() {
-        return levelBoundRect;
-    }
-
-    @Override
-    public Set<GameObject> retrieveGameObject(
-            Rectangle retrieveArea,
-            Set<String> retrieveGroupNames,
-            RetrieveFilter<GameObject> filter) {
-
-        Set<GameObject> resultSet = new HashSet<>();
-
-        if (retrieveGroupNames == null) {
-            retrieveGroupNames = gameObjectGroups.keySet();
-
-        }
-        for (String groupName : retrieveGroupNames) {
-            Set<? extends GameObject> retSet =
-                    gameObjectGroups.get(groupName).retrieve(retrieveArea);
-            for (GameObject anObject : retSet) {
-                if (filter.filter(anObject))
-                    resultSet.add(anObject);
-            }
-        }
-
-        return resultSet;
     }
 }

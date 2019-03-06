@@ -3,8 +3,11 @@ package com.yotwei.battlecity.game.object.tank;
 import com.yotwei.battlecity.game.object.block.Grass;
 import com.yotwei.battlecity.game.object.GameObject;
 import com.yotwei.battlecity.game.object.LevelContext;
+import com.yotwei.battlecity.game.object.bullet.AbstractBullet;
+import com.yotwei.battlecity.game.object.properties.Direction;
 import com.yotwei.battlecity.game.object.properties.Physic;
-import com.yotwei.battlecity.game.object.tank.behavior.ITankBehavior;
+import com.yotwei.battlecity.game.object.tank.behavior.AbstractTankBulletProjection;
+import com.yotwei.battlecity.game.object.tank.behavior.AbstractTankMovement;
 import com.yotwei.battlecity.util.Constant;
 
 import java.awt.*;
@@ -17,7 +20,8 @@ import java.util.Objects;
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractTank extends GameObject {
 
-    protected ITankBehavior<? extends AbstractTank> behavior;
+    protected AbstractTankMovement<? extends AbstractTank> tankMovement;
+    protected AbstractTankBulletProjection<? extends AbstractTank> tankBulletProj;
 
     /*
      * image resource of tank
@@ -52,7 +56,10 @@ public abstract class AbstractTank extends GameObject {
 
     /**
      * get the move speed of tank
-     * move speed is an integer, with follow format
+     * tank's moving speed can be change at any time
+     * so it need a method to calculate
+     * <p>
+     * moving speed is an integer, with follow format
      * +------------+-----------+
      * | 24 bits    |  8 bits   |
      * | speed      | speed sub |
@@ -60,6 +67,9 @@ public abstract class AbstractTank extends GameObject {
      */
     protected abstract int calcMoveSpeed();
 
+    /**
+     * update tank's coordinate according to giving direction
+     */
     private void updateTankCoord(Direction nextDir) {
         if (null == nextDir) {
 
@@ -137,6 +147,18 @@ public abstract class AbstractTank extends GameObject {
         direction = nextDir;
     }
 
+    private void projectBullet(AbstractBullet bullet) {
+        if (bullet == null)
+            return;
+        //
+        // trigger an addObject event
+        // append data is bullet instance
+        //
+        LevelContext.Event ev =
+                LevelContext.Event.wrap("addObject", bullet);
+        getLevelContext().triggerEvent(ev);
+    }
+
 
     /*
      * -------------------------------------------------------------------------------------
@@ -162,8 +184,12 @@ public abstract class AbstractTank extends GameObject {
         directionPrev = direction;
 
         // update tank coordinate according to the next moving direction
-        Direction nextDir = Objects.requireNonNull(behavior).nextMoveDirection();
+        Direction nextDir = Objects.requireNonNull(tankMovement).nextMoveDirection();
         updateTankCoord(nextDir);
+
+        // handle bullet projection
+        AbstractBullet bullet = Objects.requireNonNull(tankBulletProj).getProjBullet();
+        projectBullet(bullet);
     }
 
     @Override
@@ -213,9 +239,9 @@ public abstract class AbstractTank extends GameObject {
 
     /*
      * -------------------------------------------------------------------------------------
-     * <p>
+     *
      * implements from {@link Physic}
-     * <p>
+     *
      * -------------------------------------------------------------------------------------
      */
     @Override
@@ -225,6 +251,7 @@ public abstract class AbstractTank extends GameObject {
             return;
         }
 
+        // TODO: 2019/3/6 需要完善这里的碰撞处理
         hitbox.setLocation(hitboxPrev.getLocation());
         direction = directionPrev;
     }
@@ -251,23 +278,5 @@ public abstract class AbstractTank extends GameObject {
         return direction;
     }
 
-    /**
-     * direction is a enum
-     * to tell which direction the tank will move to in the next step
-     */
-    public enum Direction {
 
-        LEFT(0), UP(1), RIGHT(2), DOWN(3);
-
-        private int index;
-
-        Direction(int index) {
-            this.index = index;
-        }
-
-        public static boolean isOpposite(Direction d1, Direction d2) {
-            return d1 != null && d2 != null &&
-                    Math.abs(d1.index - d2.index) == 2;
-        }
-    }
 }

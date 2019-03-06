@@ -3,7 +3,8 @@ package com.yotwei.battlecity.game.object.tank;
 import com.yotwei.battlecity.framework.KeyInput;
 import com.yotwei.battlecity.game.engine.ResourcePackage;
 import com.yotwei.battlecity.game.object.LevelContext;
-import com.yotwei.battlecity.game.object.tank.behavior.ITankBehavior;
+import com.yotwei.battlecity.game.object.tank.behavior.AbstractTankBulletProjection;
+import com.yotwei.battlecity.game.object.tank.behavior.AbstractTankMovement;
 
 /**
  * Created by YotWei on 2019/3/1.
@@ -18,8 +19,11 @@ public class PlayerTank extends AbstractTank {
         // get image resource according to player id
         image = ResourcePackage.getImage("player-" + playerId);
 
-        // get moving behavior strategy
-        behavior = ITankBehavior.player(this);
+        // get moving strategy
+        tankMovement = AbstractTankMovement.player(this);
+
+        // get bullet project strategy
+        tankBulletProj = AbstractTankBulletProjection.player(this);
     }
 
 
@@ -51,7 +55,7 @@ public class PlayerTank extends AbstractTank {
         private final int up, down, left, right;
         private final int projA, projB;
 
-        public ControlKeys(int up, int down, int left, int right, int projA, int projB) {
+        private ControlKeys(int up, int down, int left, int right, int projA, int projB) {
             this.up = up;
             this.down = down;
             this.left = left;
@@ -82,6 +86,17 @@ public class PlayerTank extends AbstractTank {
 
         public boolean isProjB() {
             return KeyInput.isKeyPressed(projB);
+        }
+
+        public static ControlKeys createByPlayerId(int pid) {
+            return new ControlKeys(
+                    'W',
+                    'S',
+                    'A',
+                    'D',
+                    'K',
+                    'L'
+            );
         }
     }
 }

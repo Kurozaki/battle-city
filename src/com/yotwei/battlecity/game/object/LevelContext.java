@@ -2,7 +2,6 @@ package com.yotwei.battlecity.game.object;
 
 import java.awt.*;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * Created by YotWei on 2019/2/28.
@@ -27,8 +26,25 @@ public interface LevelContext {
      */
     int getFrameTicker();
 
+    void triggerEvent(Event ev);
+
     interface RetrieveFilter<_ObjectType extends GameObject> {
 
         boolean filter(_ObjectType anObject);
+    }
+
+    class Event {
+
+        public final String evTag;
+        public final Object[] dat;
+
+        private Event(String evTag, Object... dat) {
+            this.evTag = evTag;
+            this.dat = dat;
+        }
+
+        public static Event wrap(String evTag, Object... dat) {
+            return new Event(evTag, dat);
+        }
     }
 }

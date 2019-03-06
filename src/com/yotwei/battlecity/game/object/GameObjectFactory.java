@@ -1,6 +1,11 @@
 package com.yotwei.battlecity.game.object;
 
 import com.yotwei.battlecity.game.object.block.*;
+import com.yotwei.battlecity.game.object.bullet.AbstractBullet;
+import com.yotwei.battlecity.game.object.special.TankCreator;
+import com.yotwei.battlecity.game.object.tank.AbstractTank;
+import com.yotwei.battlecity.game.object.tank.EnemyTank;
+import com.yotwei.battlecity.game.object.tank.PlayerTank;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -70,7 +75,7 @@ public class GameObjectFactory {
         block.getHitbox().setLocation(x, y);
 
         // active the block
-        block.onActive();
+        block.setActive(true);
 
         return block;
     }
@@ -88,5 +93,45 @@ public class GameObjectFactory {
             throw new RuntimeException("Illegal block id: " + id);
         }
         return blockClass;
+    }
+
+    public static PlayerTank createPlayerTank(LevelContext lvlCtx, int playerId) {
+
+        PlayerTank playerTank = new PlayerTank(lvlCtx, playerId);
+        playerTank.setControlKeys(PlayerTank.ControlKeys.createByPlayerId(playerId));
+
+        // active tank
+        playerTank.setActive(true);
+
+        return playerTank;
+    }
+
+    public static EnemyTank createEnemyTank(LevelContext lvlCtx, int enemyId) {
+
+        EnemyTank enemyTank = new EnemyTank(lvlCtx, enemyId);
+        enemyTank.setActive(true);
+
+        return enemyTank;
+    }
+
+    public static <_TankType extends AbstractTank> TankCreator<_TankType> createTankCreator(
+            LevelContext lvlCtx,
+            int x,
+            int y,
+            _TankType tank) {
+
+        TankCreator<_TankType> creator = new TankCreator<>(lvlCtx, tank);
+        creator.getHitbox().setLocation(x, y);
+
+        // active the tank creator
+        creator.setActive(true);
+
+        return creator;
+    }
+
+    public static AbstractBullet createBullet(LevelContext lvlCtx, int typeId) {
+        AbstractBullet bullet = new AbstractBullet(lvlCtx);
+        bullet.setActive(true);
+        return bullet;
     }
 }
