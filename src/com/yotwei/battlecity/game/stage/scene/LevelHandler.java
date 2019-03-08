@@ -18,9 +18,12 @@ import com.yotwei.battlecity.game.object.tank.EnemyTank;
 import com.yotwei.battlecity.game.object.tank.PlayerTank;
 import com.yotwei.battlecity.game.player.Player;
 import com.yotwei.battlecity.util.Constant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.text.BreakIterator;
 import java.util.*;
 import java.util.List;
 
@@ -30,6 +33,15 @@ import java.util.List;
 public class LevelHandler extends AbstractScene
         implements LevelContext {
 
+    private static final Logger logger = LoggerFactory.getLogger("LevelHandler");
+    private static final int ENEMY_DEQUEUE_PERIOD = 120;
+    private static final int LEVEL_FINISHED_STAY_TICK = 120;
+
+    /*
+     * members for player control
+     */
+    private Map<Integer, Player> players;
+
     /*
      * --------------------------------------------------------
      *
@@ -37,10 +49,10 @@ public class LevelHandler extends AbstractScene
      *
      * --------------------------------------------------------
      */
-    private static final int ENEMY_DEQUEUE_PERIOD = 120;
 
     private Queue<TankCreator<EnemyTank>> enemyCreatorQueue;
 
+    private int enemyRemainCount;
     private int enemyOnScreenCount;
     private int enemyOnScreenCountMax;
     private int enemyOnceDequeueCountMax;
@@ -62,12 +74,15 @@ public class LevelHandler extends AbstractScene
      */
     private int frameTicker;
 
+    private int levelFinishedTicker;
+
+    private boolean isLevelFinished;
+
     /**
      * a Rectangle instance
      * stands for the bound of level
      */
     private final Rectangle levelBoundRect = new Rectangle(Constant.WND_SIZE);
-
 
     /**
      * background image of level
@@ -105,8 +120,14 @@ public class LevelHandler extends AbstractScene
 
         frameTicker = 0;
 
-        eventQueue = new LinkedList<>();
+        enemyRemainCount = 0;
         enemyDequeueTicker = ENEMY_DEQUEUE_PERIOD;
+
+        levelFinishedTicker = LEVEL_FINISHED_STAY_TICK;
+        isLevelFinished = false;
+
+        players = new HashMap<>();
+        eventQueue = new LinkedList<>();
 
         //
         // re initialize all game object group
@@ -116,7 +137,6 @@ public class LevelHandler extends AbstractScene
         blockGroup = IGameObjectGroup.create("Grid");
         bulletGroup = IGameObjectGroup.create("QuadTree");
         specialObjectGroup = IGameObjectGroup.create("Default");
-
 
         // get current handing level data
         LevelPackage.LevelData levelDatCurrent = getGameContext().getCurrentLevel();
@@ -178,18 +198,23 @@ public class LevelHandler extends AbstractScene
         for (Map.Entry<String, Point> entry :
                 levelDatCurrent.getPlayersStartCoord().entrySet()) {
 
-            String pname = entry.getKey();
-            Point point = entry.getValue();
-
-            Player player = getGameContext().getPlayer(pname);
-            PlayerTank tank = GameObjectFactory.createPlayerTank(this, player.getId());
-
-            TankCreator<PlayerTank> tankCreator =
-                    GameObjectFactory.createTankCreator(this, point.x, point.y, tank);
-
-            specialObjectGroup.add(tankCreator);
+            // reset players' start point
+            Player player = getGameContext().getPlayer(entry.getKey());
+            players.put(player.getId(), player);
+            player.setStartPoint(entry.getValue());
         }
 
+        // add player tank creators
+        for (Player player : players.values()) {
+            PlayerTank playerTank =
+                    GameObjectFactory.createPlayerTank(this, player.getId());
+            TankCreator<PlayerTank> tankCreator = GameObjectFactory.createTankCreator(
+                    this,
+                    player.getStartPoint().x,
+                    player.getStartPoint().y,
+                    playerTank);
+            specialObjectGroup.add(tankCreator);
+        }
 
         enemyOnScreenCountMax = levelDatCurrent.getEnemyOnScreenCountMax();
 
@@ -223,6 +248,7 @@ public class LevelHandler extends AbstractScene
                         selectedPoint.y,
                         enemyTank);
                 enemyCreatorQueue.add(anEnemyCreator);
+                enemyRemainCount++;
 
                 if (++selectedIndex == enemyCreatorSelectablePointList.size()) {
                     Collections.shuffle(enemyCreatorSelectablePointList);
@@ -230,6 +256,7 @@ public class LevelHandler extends AbstractScene
                 }
             }
         }
+
 
         //
         // initialize GameObject Groups
@@ -253,6 +280,8 @@ public class LevelHandler extends AbstractScene
         handleEnemyCreators();
 
         handleEventQueue();
+
+        checkLevelStatus();
     }
 
 
@@ -264,12 +293,14 @@ public class LevelHandler extends AbstractScene
 
         // draw game objects
         drawGameObjects(g);
+
+        drawHUD(g);
     }
 
 
     @Override
     public boolean isSceneFinished() {
-        return false;
+        return levelFinishedTicker == 0;
     }
 
     /*
@@ -337,6 +368,10 @@ public class LevelHandler extends AbstractScene
                     handleEnemyDeathEvent();
                     break;
 
+                case "playerDeath":
+                    handlePlayerDeathEvent((int) ev.dat[0]);
+                    break;
+
                 default:
             }
         }
@@ -352,6 +387,42 @@ public class LevelHandler extends AbstractScene
 
     private void handleEnemyDeathEvent() {
         enemyOnScreenCount--;
+        enemyRemainCount--;
+
+        if (logger.isInfoEnabled()) {
+            logger.info("Enemy Remain: {}", enemyRemainCount);
+        }
+
+        if (enemyRemainCount == 0) {
+            isLevelFinished = true;
+        }
+    }
+
+    private void handlePlayerDeathEvent(int playerId) {
+        if (logger.isInfoEnabled()) {
+            logger.info("kill player{ id={} }", playerId);
+        }
+
+        Player player = players.get(playerId);
+
+        if (player.decLiveCount() == 0) {
+
+            if (logger.isInfoEnabled()) {
+                logger.info("Player{ id={} } death", playerId);
+            }
+            isLevelFinished = true;
+            getGameContext().notifyGameOver();
+            return;
+        }
+
+        PlayerTank tank = GameObjectFactory.createPlayerTank(this, player.getId());
+        TankCreator<PlayerTank> creator = GameObjectFactory.createTankCreator(
+                this,
+                player.getStartPoint().x,
+                player.getStartPoint().y,
+                tank
+        );
+        specialObjectGroup.add(creator);
     }
 
     /*
@@ -414,6 +485,47 @@ public class LevelHandler extends AbstractScene
             }
         });
 
+        //
+        // check bullet inbound
+        //
+        bulletGroup.each(bullet -> {
+            if (!levelBoundRect.contains(bullet.getHitbox())) {
+                bullet.onTouchBound(levelBoundRect);
+            }
+        });
+
+        //
+        // bullet collide with blocks
+        //
+        bulletGroup.each(bullet -> {
+
+            // get retrieve set that collide with bullet
+            Set<AbstractBlock> retBlockSet = blockGroup.retrieve(bullet.getHitbox());
+
+            // check collide with every block
+            for (AbstractBlock aBlock : retBlockSet) {
+                bullet.onCollide(aBlock);
+
+                if (!bullet.isActive()) break;
+            }
+        });
+
+        //
+        // bullet collide with tank
+        //
+        bulletGroup.each(bullet -> {
+
+            // retrieve collided tank set
+            Set<AbstractTank> retTankSet = tankGroup.retrieve(bullet.getHitbox());
+
+            for (AbstractTank aTank : retTankSet) {
+                bullet.onCollide(aTank);
+
+                if (!bullet.isActive()) {
+                    break;
+                }
+            }
+        });
     }
 
     private void handleEnemyCreators() {
@@ -431,12 +543,20 @@ public class LevelHandler extends AbstractScene
 
         for (int i = 0; i < dequeueCount; i++) {
             TankCreator<EnemyTank> creator = enemyCreatorQueue.poll();
+
             if (creator == null) {
-                // TODO: 2019/3/6 handle all enemy clear
+                // enemy clear
                 break;
             }
+
             specialObjectGroup.add(creator);
             enemyOnScreenCount++;
+        }
+    }
+
+    private void checkLevelStatus() {
+        if (isLevelFinished) {
+            levelFinishedTicker--;
         }
     }
 
@@ -465,6 +585,14 @@ public class LevelHandler extends AbstractScene
 
         while (!drawQueue.isEmpty()) {
             drawQueue.poll().draw(g);
+        }
+    }
+
+    private void drawHUD(Graphics2D g) {
+        // TODO: 2019/3/8 完善UI绘制
+        g.setColor(Color.WHITE);
+        for (Player player : players.values()) {
+            g.drawString(String.format("%s lives: %d", player.getName(), player.getLiveCount()), 10, 20);
         }
     }
 }

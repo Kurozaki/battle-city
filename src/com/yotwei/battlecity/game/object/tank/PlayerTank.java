@@ -13,8 +13,12 @@ public class PlayerTank extends AbstractTank {
 
     private ControlKeys controlKeys;
 
+    private final int playerId;
+
     public PlayerTank(LevelContext lvlCtx, int playerId) {
         super(lvlCtx);
+
+        this.playerId = playerId;
 
         // get image resource according to player id
         image = ResourcePackage.getImage("player-" + playerId);
@@ -45,6 +49,18 @@ public class PlayerTank extends AbstractTank {
 
     public ControlKeys getControlKeys() {
         return controlKeys;
+    }
+
+    @Override
+    public int tryDamage(int damageValue) {
+        // TODO: 2019/3/8 完善子弹撞击逻辑
+        setActive(false);
+
+        LevelContext.Event ev = LevelContext.Event.wrap("playerDeath", playerId);
+        getLevelContext().triggerEvent(ev);
+
+        return damageValue;
+//        return 0;
     }
 
     /**

@@ -19,11 +19,11 @@ public interface IGameObjectGroup<_ObjectType extends GameObject> {
     Set<_ObjectType> retrieve(Rectangle retArea);
 
     static <_ObjectType extends GameObject> IGameObjectGroup<_ObjectType> create(String datastruct) {
-//        if (datastruct.equals("Grid"))
-//            return new GridGameObjectGroup<>(
-//                    new Rectangle(Constant.WND_SIZE),
-//                    8,
-//                    8);
+        if (datastruct.equals("Grid"))
+            return new GridGameObjectGroup<>(
+                    new Rectangle(Constant.WND_SIZE),
+                    8,
+                    8);
         return new DefaultGameObjectGroup<>();
     }
 }

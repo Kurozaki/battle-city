@@ -4,6 +4,7 @@ import com.yotwei.battlecity.game.object.block.Grass;
 import com.yotwei.battlecity.game.object.GameObject;
 import com.yotwei.battlecity.game.object.LevelContext;
 import com.yotwei.battlecity.game.object.bullet.AbstractBullet;
+import com.yotwei.battlecity.game.object.properties.BulletDamageAble;
 import com.yotwei.battlecity.game.object.properties.Direction;
 import com.yotwei.battlecity.game.object.properties.Physic;
 import com.yotwei.battlecity.game.object.tank.behavior.AbstractTankBulletProjection;
@@ -18,7 +19,8 @@ import java.util.Objects;
  * Created by YotWei on 2019/3/1.
  */
 @SuppressWarnings("WeakerAccess")
-public abstract class AbstractTank extends GameObject {
+public abstract class AbstractTank extends GameObject
+        implements BulletDamageAble {
 
     protected AbstractTankMovement<? extends AbstractTank> tankMovement;
     protected AbstractTankBulletProjection<? extends AbstractTank> tankBulletProj;
@@ -266,6 +268,7 @@ public abstract class AbstractTank extends GameObject {
     public Rectangle getHitbox() {
         return hitbox;
     }
+
 
     /*
      * -------------------------------------------------------------------------------------

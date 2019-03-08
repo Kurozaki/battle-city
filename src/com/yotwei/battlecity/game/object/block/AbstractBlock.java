@@ -3,6 +3,7 @@ package com.yotwei.battlecity.game.object.block;
 import com.yotwei.battlecity.game.engine.ResourcePackage;
 import com.yotwei.battlecity.game.object.GameObject;
 import com.yotwei.battlecity.game.object.LevelContext;
+import com.yotwei.battlecity.game.object.properties.BulletDamageAble;
 import com.yotwei.battlecity.game.object.properties.Physic;
 import com.yotwei.battlecity.util.Constant;
 
@@ -13,7 +14,8 @@ import java.awt.image.BufferedImage;
  * Created by YotWei on 2019/2/25.
  */
 @SuppressWarnings("WeakerAccess")
-public abstract class AbstractBlock extends GameObject {
+public abstract class AbstractBlock extends GameObject
+        implements BulletDamageAble {
 
     private int typeId;
 
@@ -121,5 +123,19 @@ public abstract class AbstractBlock extends GameObject {
     @Override
     public Rectangle getHitbox() {
         return hitbox;
+    }
+
+
+    /* -------------------------------------------------------------------------------------
+     *
+     * method implements from {@link BulletDamageAble}
+     *
+     * -------------------------------------------------------------------------------------
+     */
+    @Override
+    public int tryDamage(int damageValue) {
+        // TODO: 2019/3/7 完善被子弹击中的逻辑
+        setActive(false);
+        return damageValue;
     }
 }

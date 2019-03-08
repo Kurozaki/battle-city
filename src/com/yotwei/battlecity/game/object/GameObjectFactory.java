@@ -130,7 +130,9 @@ public class GameObjectFactory {
     }
 
     public static AbstractBullet createBullet(LevelContext lvlCtx, int typeId) {
-        AbstractBullet bullet = new AbstractBullet(lvlCtx);
+        AbstractBullet bullet = new AbstractBullet(lvlCtx) {
+
+        };
         bullet.setActive(true);
         return bullet;
     }

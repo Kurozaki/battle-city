@@ -5,6 +5,8 @@ import com.yotwei.battlecity.game.object.LevelContext;
 import com.yotwei.battlecity.game.object.properties.BulletDamageAble;
 import com.yotwei.battlecity.game.object.properties.Direction;
 import com.yotwei.battlecity.game.object.properties.Physic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.management.HotspotClassLoadingMBean;
 
 import java.awt.*;
@@ -12,22 +14,25 @@ import java.awt.*;
 /**
  * Created by YotWei on 2019/3/6.
  */
-public class AbstractBullet extends GameObject
+public abstract class AbstractBullet extends GameObject
         implements BulletDamageAble {
 
-    private static final Dimension DEFAULT_SIZE = new Dimension(8, 8);
+    private static final Logger logger = LoggerFactory.getLogger("AbstractBullet");
 
-    private final Rectangle hitbox;
+    private static final Dimension SIZE_DEFAULT = new Dimension(8, 8);
+    private static final int SPEED_DEFAULT = 640;
+    private static final int ATK_DEFAULT = 100;
 
-    private int bulletATK;
+    private final Rectangle hitbox = new Rectangle(SIZE_DEFAULT);
 
+    private int bulletATK = ATK_DEFAULT;
+
+    private int speed = SPEED_DEFAULT;
     private int movePixel;
-    private int speed = 640;
     private Direction direction;
 
     public AbstractBullet(LevelContext lvlCtx) {
         super(lvlCtx);
-        hitbox = new Rectangle(DEFAULT_SIZE);
     }
 
     public void setSpeed(int speed) {
@@ -110,7 +115,9 @@ public class AbstractBullet extends GameObject
 
     @Override
     public void onInactive() {
-
+//        if (logger.isInfoEnabled()) {
+//            logger.info("bullet: {} removed()", getUID());
+//        }
     }
 
     /*
@@ -127,7 +134,16 @@ public class AbstractBullet extends GameObject
 
     @Override
     public void onCollide(Physic<? extends Shape> anotherObject) {
+        if (!(anotherObject instanceof BulletDamageAble)) {
+            return;
+        }
+        // calculate read damage
+        int readDamage = ((BulletDamageAble) anotherObject).tryDamage(bulletATK);
+        bulletATK -= readDamage;
 
+        if (bulletATK <= 0) {
+            setActive(false);
+        }
     }
 
     @Override

@@ -9,18 +9,20 @@ import java.awt.*;
  */
 public class LevelClearer extends AbstractScene {
 
+    private int ticker;
+
     public LevelClearer(GameContext context) {
         super(context);
     }
 
     @Override
     public void resetScene() {
-
+        ticker = 120;
     }
 
     @Override
     public void updateScene() {
-
+        ticker--;
     }
 
     @Override
@@ -30,6 +32,6 @@ public class LevelClearer extends AbstractScene {
 
     @Override
     public boolean isSceneFinished() {
-        return false;
+        return ticker == 0;
     }
 }

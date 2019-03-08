@@ -34,4 +34,11 @@ public class EnemyTank extends AbstractTank {
     protected int calcMoveSpeed() {
         return 240;
     }
+
+    @Override
+    public int tryDamage(int damageValue) {
+        // TODO: 2019/3/7 完善子弹逻辑
+        setActive(false);
+        return damageValue;
+    }
 }

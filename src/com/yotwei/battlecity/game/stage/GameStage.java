@@ -22,9 +22,14 @@ public class GameStage extends GameContext
 
     private static final Logger logger = LoggerFactory.getLogger("GameStage");
 
+    // mark if GameStage handle finished
+    private boolean isStageFinished = false;
+
+    //
+    // to control scenes switch
+    //
     private AbstractScene[] scenesArray;
     private int sceneCursor;
-
     private boolean switchScene;
 
     @Override
@@ -74,6 +79,14 @@ public class GameStage extends GameContext
     @Override
     public void update(IStageHandleContext ctx) {
 
+        if (sceneCursor == 0 && isGameOver()) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Game Over");
+            }
+            isStageFinished = true;
+            return;
+        }
+
         // set switch scene flag to false
         switchScene = false;
 
@@ -111,7 +124,7 @@ public class GameStage extends GameContext
 
     @Override
     public IStage next() {
-        return this;
+        return isStageFinished ? new GameOverStage() : this;
     }
 
 }

@@ -16,11 +16,12 @@ public abstract class GameContext {
 
     private static final Logger logger = LoggerFactory.getLogger("GameContext");
 
- //   private LevelPackage levelPackage;
     private Iterator<Map.Entry<String, LevelPackage.LevelData>> levelIterator;
 
     private LevelPackage.LevelData levelDataCurrent;
     private Map<String, Player> players;
+
+    private boolean isGameOver;
 
     protected void setLevelPackage(LevelPackage levelPackage) {
 
@@ -48,15 +49,29 @@ public abstract class GameContext {
      */
     public void switchLevel() {
 
-        // get next level by using levelIterator
-        Map.Entry<String, LevelPackage.LevelData> entry = levelIterator.next();
+        if (levelIterator.hasNext()) {
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("switch to level '{}'", entry.getKey());
+            // get next level by using levelIterator
+            Map.Entry<String, LevelPackage.LevelData> entry = levelIterator.next();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("switch to level '{}'", entry.getKey());
+            }
+
+            // set to current level
+            levelDataCurrent = entry.getValue();
+        } else {
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("all level finished.");
+            }
+
+            //
+            // no no more level
+            // set status to game over
+            //
+            notifyGameOver();
         }
-
-        // set to current level
-        levelDataCurrent = entry.getValue();
     }
 
     public LevelPackage.LevelData getCurrentLevel() {
@@ -65,5 +80,13 @@ public abstract class GameContext {
 
     public Player getPlayer(String name) {
         return players.get(name);
+    }
+
+    public void notifyGameOver() {
+        isGameOver = true;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 }

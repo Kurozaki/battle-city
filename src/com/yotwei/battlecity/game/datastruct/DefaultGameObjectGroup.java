@@ -1,6 +1,7 @@
 package com.yotwei.battlecity.game.datastruct;
 
 import com.yotwei.battlecity.game.object.GameObject;
+import com.yotwei.battlecity.game.object.special.TankCreator;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ public class DefaultGameObjectGroup<_ObjectType extends GameObject>
 
     private Set<_ObjectType> objectSet;
 
-    public DefaultGameObjectGroup() {
+    DefaultGameObjectGroup() {
         objectSet = new HashSet<>();
     }
 
@@ -25,13 +26,20 @@ public class DefaultGameObjectGroup<_ObjectType extends GameObject>
         return objectSet.add(anObject);
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public int each(Consumer<_ObjectType> consumer) {
-        objectSet.forEach(anObject -> {
+
+        Iterator<_ObjectType> itr = objectSet.iterator();
+        while (itr.hasNext()) {
+            _ObjectType anObject = itr.next();
             if (anObject.isActive()) {
                 consumer.accept(anObject);
+            } else {
+                itr.remove();
             }
-        });
+        }
+
         return objectSet.size();
     }
 
