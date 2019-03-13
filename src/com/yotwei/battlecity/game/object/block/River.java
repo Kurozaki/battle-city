@@ -10,4 +10,9 @@ public class River extends AbstractBlock {
     protected River(LevelContext lvlCtx, int blockTypeId) {
         super(lvlCtx, blockTypeId);
     }
+
+    @Override
+    public int tryDamage(int damageValue) {
+        return 0;
+    }
 }

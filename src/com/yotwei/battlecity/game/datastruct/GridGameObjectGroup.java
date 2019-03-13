@@ -3,10 +3,7 @@ package com.yotwei.battlecity.game.datastruct;
 import com.yotwei.battlecity.game.object.GameObject;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -19,6 +16,7 @@ public class GridGameObjectGroup<_ObjectType extends GameObject>
 
     private final Array2D<Set<_ObjectType>> array2d;
     private final Set<_ObjectType> objectSet;
+    private final Set<_ObjectType> removeSet;
 
     private final Rectangle boundary;
 
@@ -35,6 +33,7 @@ public class GridGameObjectGroup<_ObjectType extends GameObject>
 
         array2d = new Array2D<>(row, col);
         objectSet = new HashSet<>();
+        removeSet = new HashSet<>();
     }
 
     @Override
@@ -50,6 +49,11 @@ public class GridGameObjectGroup<_ObjectType extends GameObject>
         return true;
     }
 
+    @Override
+    public boolean remove(_ObjectType anObject) {
+        return removeSet.add(anObject);
+    }
+
     @SuppressWarnings("Duplicates")
     @Override
     public int each(Consumer<_ObjectType> consumer) {
@@ -57,7 +61,7 @@ public class GridGameObjectGroup<_ObjectType extends GameObject>
         Iterator<_ObjectType> itr = objectSet.iterator();
         while (itr.hasNext()) {
             _ObjectType anObject = itr.next();
-            if (anObject.isActive()) {
+            if (anObject.isActive() && !removeSet.contains(anObject)) {
                 consumer.accept(anObject);
             } else {
                 itr.remove();

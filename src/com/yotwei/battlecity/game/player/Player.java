@@ -47,6 +47,10 @@ public class Player {
         return score;
     }
 
+    public void addScore(int addScore) {
+        this.score += addScore;
+    }
+
     public void setStartPoint(Point startPoint) {
         this.startPoint = startPoint;
     }

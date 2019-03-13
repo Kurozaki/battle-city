@@ -33,6 +33,26 @@ public abstract class AbstractTankBulletProjection<_TankType extends AbstractTan
         return new PlayerTankBulletProjection(tank);
     }
 
+    public static AbstractTankBulletProjection<EnemyTank> enemy(EnemyTank tank, String strategy) {
+        EnemyTankBulletDefaultProjection p = new EnemyTankBulletDefaultProjection(tank);
+
+        switch (strategy) {
+            case "freeze":
+                p.setProjectedBulletId(2);
+                break;
+
+            case "ap":
+                p.setProjectedBulletId(3);
+                break;
+
+            case "burst":
+                p.setProjectedBulletId(4);
+                break;
+        }
+
+        return p;
+    }
+
     public static <T extends AbstractTank> AbstractTankBulletProjection<T> none(T tank) {
 
         return new AbstractTankBulletProjection<T>(tank) {

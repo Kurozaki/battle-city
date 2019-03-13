@@ -14,6 +14,8 @@ public interface IGameObjectGroup<_ObjectType extends GameObject> {
 
     boolean add(_ObjectType anObject);
 
+    boolean remove(_ObjectType anObject);
+
     int each(Consumer<_ObjectType> consumer);
 
     Set<_ObjectType> retrieve(Rectangle retArea);

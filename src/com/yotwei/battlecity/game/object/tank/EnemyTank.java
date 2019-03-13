@@ -11,14 +11,59 @@ import com.yotwei.battlecity.game.object.tank.behavior.AbstractTankMovement;
  */
 public class EnemyTank extends AbstractTank {
 
+    protected int speedBase;
+
     public EnemyTank(LevelContext lvlCtx, int enemyTypeId) {
         super(lvlCtx);
 
         image = ResourcePackage.getImage("enemy-" + enemyTypeId);
         direction = Direction.DOWN;
 
+        switch (enemyTypeId) {
+            case 1:
+                tankBulletProj = AbstractTankBulletProjection.enemy(this, "default");
+                tankDurability = 100;
+                speedBase =0x120;
+                break;
+
+            case 2:
+                tankBulletProj = AbstractTankBulletProjection.enemy(this, "default");
+                tankDurability = 100;
+                speedBase = 0x140;
+                break;
+
+            case 3:
+                tankBulletProj = AbstractTankBulletProjection.enemy(this, "ap");
+                tankDurability = 600;
+                speedBase = 0x110;
+                break;
+
+            case 4:
+                tankBulletProj = AbstractTankBulletProjection.enemy(this, "freeze");
+                tankDurability = 300;
+                speedBase = 0x130;
+                break;
+
+            case 5:
+                tankBulletProj = AbstractTankBulletProjection.enemy(this,"burst");
+                tankDurability = 400;
+                speedBase = 0x110;
+                break;
+
+            default:
+                throw new RuntimeException("Illegal enemy id: " + enemyTypeId);
+        }
+
         tankMovement = AbstractTankMovement.enemy(this);
-        tankBulletProj = AbstractTankBulletProjection.none(this);
+    }
+
+    @Override
+    public void onActive() {
+        // set tag
+        setTag("Tank-Enemy");
+
+        super.onActive();
+
     }
 
     @Override
@@ -30,15 +75,22 @@ public class EnemyTank extends AbstractTank {
         getLevelContext().triggerEvent(ev);
     }
 
-    @Override
-    protected int calcMoveSpeed() {
-        return 240;
-    }
 
     @Override
-    public int tryDamage(int damageValue) {
-        // TODO: 2019/3/7 完善子弹逻辑
-        setActive(false);
-        return damageValue;
+    protected int calcMoveSpeed() {
+
+        float factory = 1.0f;
+
+        //
+        // freeze check
+        //
+        int freezeTime = (int) extra.getOrDefault("freeze", 0);
+        if (freezeTime > 0) {
+            extra.put("freeze", freezeTime - 1);
+            factory = 0.25f;
+        }
+
+        return (int) (speedBase * factory);
     }
+
 }

@@ -8,7 +8,10 @@ import com.yotwei.battlecity.game.object.GameObjectFactory;
 import com.yotwei.battlecity.game.object.LevelContext;
 import com.yotwei.battlecity.game.level.LevelPackage;
 import com.yotwei.battlecity.game.object.block.AbstractBlock;
+import com.yotwei.battlecity.game.object.block.Eagle;
 import com.yotwei.battlecity.game.object.bullet.AbstractBullet;
+import com.yotwei.battlecity.game.object.effect.Effect;
+import com.yotwei.battlecity.game.object.item.*;
 import com.yotwei.battlecity.game.object.properties.DrawAble;
 import com.yotwei.battlecity.game.object.properties.LifeCycle;
 import com.yotwei.battlecity.game.object.special.SpecialObject;
@@ -23,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.text.BreakIterator;
 import java.util.*;
 import java.util.List;
 
@@ -36,6 +38,9 @@ public class LevelHandler extends AbstractScene
     private static final Logger logger = LoggerFactory.getLogger("LevelHandler");
     private static final int ENEMY_DEQUEUE_PERIOD = 120;
     private static final int LEVEL_FINISHED_STAY_TICK = 120;
+    private static final Point EAGLE_POINT = new Point(304, 448);
+
+    private int itemTicker = 5 * 60;
 
     /*
      * members for player control
@@ -99,10 +104,15 @@ public class LevelHandler extends AbstractScene
      */
     private Map<String, IGameObjectGroup<? extends GameObject>> gameObjectGroups;
 
+    private Eagle eagle;
+
     private IGameObjectGroup<AbstractBlock> blockGroup;
     private IGameObjectGroup<AbstractTank> tankGroup;
     private IGameObjectGroup<AbstractBullet> bulletGroup;
+    private IGameObjectGroup<Effect> effectGroup;
+    private IGameObjectGroup<AbstractItem> itemGroup;
     private IGameObjectGroup<SpecialObject> specialObjectGroup;
+
 
     public LevelHandler(GameContext context) {
         super(context);
@@ -137,6 +147,8 @@ public class LevelHandler extends AbstractScene
         blockGroup = IGameObjectGroup.create("Grid");
         bulletGroup = IGameObjectGroup.create("QuadTree");
         specialObjectGroup = IGameObjectGroup.create("Default");
+        effectGroup = IGameObjectGroup.create("Default");
+        itemGroup = IGameObjectGroup.create("Default");
 
         // get current handing level data
         LevelPackage.LevelData levelDatCurrent = getGameContext().getCurrentLevel();
@@ -194,6 +206,14 @@ public class LevelHandler extends AbstractScene
                 blockGroup.add(block);
             }
         }
+
+        //
+        // add eagle into block group
+        //
+        eagle = new Eagle(this);
+        eagle.setActive(true);
+        eagle.getHitbox().setLocation(EAGLE_POINT);
+        blockGroup.add(eagle);
 
         for (Map.Entry<String, Point> entry :
                 levelDatCurrent.getPlayersStartCoord().entrySet()) {
@@ -266,6 +286,8 @@ public class LevelHandler extends AbstractScene
         gameObjectGroups.put("blockGroup", blockGroup);
         gameObjectGroups.put("tankGroup", tankGroup);
         gameObjectGroups.put("bulletGroup", bulletGroup);
+        gameObjectGroups.put("effectGroup", effectGroup);
+        gameObjectGroups.put("itemGroup", itemGroup);
         gameObjectGroups.put("specialObjectGroup", specialObjectGroup);
     }
 
@@ -280,6 +302,8 @@ public class LevelHandler extends AbstractScene
         handleEnemyCreators();
 
         handleEventQueue();
+
+        handleItem();
 
         checkLevelStatus();
     }
@@ -356,6 +380,9 @@ public class LevelHandler extends AbstractScene
      * -------------------------------------------------------
      */
     private void handleEventQueue() {
+
+        Queue<Event> newEventQueue = new LinkedList<>();
+
         while (!eventQueue.isEmpty()) {
             Event ev = eventQueue.poll();
 
@@ -372,9 +399,64 @@ public class LevelHandler extends AbstractScene
                     handlePlayerDeathEvent((int) ev.dat[0]);
                     break;
 
+                case "eagleDestroyed":
+                    isLevelFinished = true;
+                    getGameContext().notifyGameOver();
+                    break;
+
+                case "clearEnemyOnScreen":
+                    clearEnemyOnScreen();
+                    break;
+
+                case "strengthenBlocksAroundEagle":
+                    changeBlockAroundEagle(true);
+                    // create a delay trigger event
+                    Event delayEv = Event.wrap(
+                            "delay",
+                            60 * 20,    /* delay time (frame) */
+                            Event.wrap("weakenBlocksAroundEagle") /* delat event */
+                    );
+                    newEventQueue.add(delayEv);
+                    break;
+
+                case "weakenBlocksAroundEagle":
+                    changeBlockAroundEagle(false);
+                    break;
+
+                case "addPlayerLiveCount":
+                    int playerId = (int) ev.dat[0];
+                    players.get(playerId).incLiveCount();
+                    break;
+
+                case "freezeEnemies":
+                    handleFreezeEnemiesEvent();
+                    break;
+
+                case "delay":
+                    int remainTime = (int) ev.dat[0];
+                    if (remainTime == 0) {
+                        ev = (Event) ev.dat[1];
+                    } else {
+                        ev.dat[0] = remainTime - 1;
+                    }
+                    newEventQueue.add(ev);
+                    break;
+
                 default:
             }
         }
+
+        while (!newEventQueue.isEmpty()) {
+            eventQueue.add(newEventQueue.poll());
+        }
+    }
+
+    private void handleFreezeEnemiesEvent() {
+        tankGroup.each(tank -> {
+            if (!tank.getTag().equals("Tank-Enemy"))
+                return;
+            tank.getExtra().put("freeze", 60 * 6 /* freeze for 5s */);
+        });
     }
 
     private void handleAddObjectEvent(GameObject anObject) {
@@ -382,6 +464,8 @@ public class LevelHandler extends AbstractScene
             tankGroup.add((AbstractTank) anObject);
         } else if (anObject instanceof AbstractBullet) {
             bulletGroup.add(((AbstractBullet) anObject));
+        } else if (anObject instanceof Effect) {
+            effectGroup.add((Effect) anObject);
         }
     }
 
@@ -423,6 +507,64 @@ public class LevelHandler extends AbstractScene
                 tank
         );
         specialObjectGroup.add(creator);
+    }
+
+    private void clearEnemyOnScreen() {
+        tankGroup.each(tank -> {
+            if (tank.getTag().equals("Tank-Enemy")) {
+                tank.setActive(false);
+            }
+        });
+    }
+
+    private void changeBlockAroundEagle(boolean isStrengthen) {
+
+        Rectangle eagleHitbox = eagle.getHitbox();
+        Rectangle retArea = new Rectangle(eagleHitbox.width << 1, eagleHitbox.height << 1);
+        retArea.setLocation(
+                eagleHitbox.x + (eagleHitbox.width - retArea.width >> 1),
+                eagleHitbox.y + (eagleHitbox.height - retArea.height >> 1)
+        );
+
+        for (AbstractBlock block : blockGroup.retrieve(retArea)) {
+
+            if (isStrengthen) {
+                switch (block.getTag()) {
+                    case "Block-RedBrick":
+                        //
+                        // replace RedBrick with IronBlock
+                        //
+                        AbstractBlock newBlock = GameObjectFactory.createBlock(
+                                this,
+                                2,  // id of iron block is 2
+                                block.getHitbox().x,
+                                block.getHitbox().y
+                        );
+
+                        blockGroup.add(newBlock);
+                        blockGroup.remove(block);
+                        break;
+                }
+            } else {
+
+                switch (block.getTag()) {
+                    case "Block-IronBlock":
+                        //
+                        // replace RedBrick with IronBlock
+                        //
+                        AbstractBlock newBlock = GameObjectFactory.createBlock(
+                                this,
+                                1,
+                                block.getHitbox().x,
+                                block.getHitbox().y
+                        );
+                        blockGroup.add(newBlock);
+                        blockGroup.remove(block);
+
+                        break;
+                }
+            }
+        }
     }
 
     /*
@@ -486,6 +628,16 @@ public class LevelHandler extends AbstractScene
         });
 
         //
+        // tank with items
+        //
+        tankGroup.each(tank -> {
+            Set<AbstractItem> itemSet = itemGroup.retrieve(tank.getHitbox());
+            for (AbstractItem item : itemSet) {
+                item.onCollide(tank);
+            }
+        });
+
+        //
         // check bullet inbound
         //
         bulletGroup.each(bullet -> {
@@ -526,6 +678,25 @@ public class LevelHandler extends AbstractScene
                 }
             }
         });
+
+        //
+        // bullet collide with bullet
+        //
+        bulletGroup.each(bullet -> {
+
+            Set<AbstractBullet> retBulletSet = bulletGroup.retrieve(bullet.getHitbox());
+
+            for (AbstractBullet anotherBullet : retBulletSet) {
+                if (anotherBullet == bullet) continue;
+
+                bullet.onCollide(anotherBullet);
+
+                if (!bullet.isActive()) {
+                    return;
+                }
+            }
+
+        });
     }
 
     private void handleEnemyCreators() {
@@ -554,9 +725,25 @@ public class LevelHandler extends AbstractScene
         }
     }
 
+
     private void checkLevelStatus() {
         if (isLevelFinished) {
             levelFinishedTicker--;
+        }
+    }
+
+    private void handleItem() {
+        if (itemTicker-- <= 0) {
+            Random rand = new Random();
+
+            int id = rand.nextInt(7) + 1;
+            int x = rand.nextInt(39) * 16 + 8;
+            int y = rand.nextInt(29) * 16 + 8;
+
+            AbstractItem item = GameObjectFactory.createItem(this, id, x, y);
+            itemGroup.add(item);
+
+            itemTicker = 15 * 60;
         }
     }
 

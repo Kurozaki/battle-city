@@ -1,11 +1,17 @@
 package com.yotwei.battlecity.game.object.special;
 
+import com.yotwei.battlecity.game.engine.ResourcePackage;
+import com.yotwei.battlecity.game.object.GameObject;
 import com.yotwei.battlecity.game.object.LevelContext;
 import com.yotwei.battlecity.game.object.properties.Physic;
 import com.yotwei.battlecity.game.object.tank.AbstractTank;
 import com.yotwei.battlecity.util.Constant;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by YotWei on 2019/3/5.
@@ -19,6 +25,12 @@ public class TankCreator<_TankType extends AbstractTank> extends SpecialObject {
 
     private Rectangle hitbox;
 
+    private BufferedImage image;
+    private int frameCount;
+
+    private Set<String> retrieveGroupNames ;
+    private LevelContext.RetrieveFilter<GameObject> retrieveFilter;
+
     public TankCreator(LevelContext lvlCtx, _TankType accessTank) {
         super(lvlCtx);
 
@@ -26,17 +38,27 @@ public class TankCreator<_TankType extends AbstractTank> extends SpecialObject {
         this.hitbox = new Rectangle(Constant.UNIT_SIZE_2X);
     }
 
-
     @Override
     public void onActive() {
-        ticker = TANK_CREATE_DELAY_TICK;
+
+        this.image = ResourcePackage.getImage("special_tank_creator");
+        this.frameCount = image.getWidth() / hitbox.width;
+
+        retrieveGroupNames = new HashSet<>();
+        retrieveGroupNames.add("tankGroup");
+        retrieveFilter = anObject -> true;
     }
 
     @Override
     public void update() {
 
-        if (ticker-- <= 0) {
-            // destroyed self
+        if (ticker++ < TANK_CREATE_DELAY_TICK) {
+            return;
+        }
+
+        Set<GameObject> retSet = getLevelContext()
+                .retrieveGameObject(hitbox, retrieveGroupNames, retrieveFilter);
+        if (retSet.isEmpty()) {
             setActive(false);
         }
     }
@@ -50,13 +72,27 @@ public class TankCreator<_TankType extends AbstractTank> extends SpecialObject {
 
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(Color.GRAY);
-        g.fillOval(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        int frameX = (ticker >> 3) % frameCount;
+        g.drawImage(
+                image,
+
+                hitbox.x,
+                hitbox.y,
+                hitbox.x + hitbox.width,
+                hitbox.y + hitbox.height,
+
+                frameX * hitbox.width,
+                0,
+                (frameX + 1) * hitbox.width,
+                hitbox.height,
+
+                null
+        );
     }
 
     @Override
     public int getDrawPriority() {
-        return 0;
+        return 3;
     }
 
     @Override

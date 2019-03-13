@@ -13,6 +13,9 @@ public class Test {
 
     public static void main(String[] args) throws IOException {
 
-        ResourcePackage.init();
+        String str = "wYDN4UXJ4cTN2UXJHÖ0Q5UXJ1cjQ4UXJ";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            System.out.print(str.charAt(i));
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.yotwei.battlecity.game.datastruct;
 
 import com.yotwei.battlecity.game.object.GameObject;
-import com.yotwei.battlecity.game.object.special.TankCreator;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -24,6 +23,12 @@ public class DefaultGameObjectGroup<_ObjectType extends GameObject>
     @Override
     public boolean add(_ObjectType anObject) {
         return objectSet.add(anObject);
+    }
+
+    @Override
+    public boolean remove(_ObjectType anObject) {
+//        return objectSet.remove(anObject);
+        throw new UnsupportedOperationException("Unsupported method remove()");
     }
 
     @SuppressWarnings("Duplicates")

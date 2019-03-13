@@ -13,6 +13,11 @@ public class Grass extends AbstractBlock {
 
     @Override
     public int getDrawPriority() {
-        return 2;
+        return 4;
+    }
+
+    @Override
+    public int tryDamage(int damageValue) {
+        return 0;
     }
 }

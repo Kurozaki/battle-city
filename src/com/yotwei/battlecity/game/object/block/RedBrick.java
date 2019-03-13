@@ -9,5 +9,8 @@ public class RedBrick extends AbstractBlock {
 
     protected RedBrick(LevelContext lvlCtx, int typeId) {
         super(lvlCtx, typeId);
+
+        durability = 200;
     }
+
 }

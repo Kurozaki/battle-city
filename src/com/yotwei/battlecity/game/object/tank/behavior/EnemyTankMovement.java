@@ -19,7 +19,9 @@ public class EnemyTankMovement extends AbstractTankMovement<EnemyTank> {
 
     private Map<Direction, Rectangle> detectBoxes;
 
-    private LevelContext.RetrieveFilter<GameObject> filter = anObject -> true;
+    private LevelContext.RetrieveFilter<GameObject> retrieveFilter;
+    private Set<String> retrieveGroupNames;
+
     private Random rand;
     private int ticker;
 
@@ -42,6 +44,11 @@ public class EnemyTankMovement extends AbstractTankMovement<EnemyTank> {
         }
 
         rand = new Random();
+        retrieveFilter = anObject -> true;
+
+        retrieveGroupNames = new HashSet<>();
+        retrieveGroupNames.add("blockGroup");
+        retrieveGroupNames.add("tankGroup");
     }
 
     private void updateDetectBoxes(Rectangle tankHitbox) {
@@ -93,7 +100,7 @@ public class EnemyTankMovement extends AbstractTankMovement<EnemyTank> {
             return tank.getDirection();
         }
 
-        ticker = 12;
+        ticker = 16 + rand.nextInt(16);
 
         //
         // find available moving direction
@@ -117,7 +124,7 @@ public class EnemyTankMovement extends AbstractTankMovement<EnemyTank> {
 
                 // check detect box
                 if (lc.getLevelBound().contains(detBox) &&
-                        lc.retrieveGameObject(detBox, null, filter).isEmpty()) {
+                        lc.retrieveGameObject(detBox, retrieveGroupNames, retrieveFilter).isEmpty()) {
 
                     // detect box not meet any block or out of level bound
                     // so the next direction is available, add to selectable direction list

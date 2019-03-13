@@ -38,4 +38,5 @@ public abstract class AbstractTankMovement<_TankType extends AbstractTank> {
     public static AbstractTankMovement<EnemyTank> enemy(EnemyTank tank) {
         return new EnemyTankMovement(tank);
     }
+
 }

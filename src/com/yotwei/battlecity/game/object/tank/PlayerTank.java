@@ -15,10 +15,19 @@ public class PlayerTank extends AbstractTank {
 
     private final int playerId;
 
+    private int speedBase;
+    private int bulletSlotBase;
+
+    private int freezeTicker = 0;
+
     public PlayerTank(LevelContext lvlCtx, int playerId) {
         super(lvlCtx);
 
         this.playerId = playerId;
+
+        speedBase = 0x120;
+        bulletSlotBase = 2;
+        tankDurability = 100;
 
         // get image resource according to player id
         image = ResourcePackage.getImage("player-" + playerId);
@@ -40,7 +49,11 @@ public class PlayerTank extends AbstractTank {
      */
     @Override
     protected int calcMoveSpeed() {
-        return 0x180;
+        float factory = 1.0f + (float) extra.getOrDefault("speedUp", 0.0f);
+        if (freezeTicker > 0) {
+            factory *= 0.2f;
+        }
+        return (int) (factory * speedBase);
     }
 
     public void setControlKeys(ControlKeys controlKeys) {
@@ -52,15 +65,43 @@ public class PlayerTank extends AbstractTank {
     }
 
     @Override
-    public int tryDamage(int damageValue) {
-        // TODO: 2019/3/8 完善子弹撞击逻辑
-        setActive(false);
+    public void onActive() {
+        // set tag
+        setTag("Tank-Player");
+
+        super.onActive();
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        boolean isAddLiveCount = extra.containsKey("addLiveCount");
+        if (isAddLiveCount) {
+            getLevelContext().triggerEvent(LevelContext.Event.wrap("addPlayerLiveCount", playerId));
+            extra.remove("addLiveCount");
+        }
+
+        boolean isFrozen = extra.containsKey("freeze");
+        if (isFrozen) {
+            extra.remove("freeze");
+            freezeTicker = 60;
+        }
+
+        if (freezeTicker > 0) freezeTicker--;
+    }
+
+    @Override
+    public void onInactive() {
+        super.onInactive();
 
         LevelContext.Event ev = LevelContext.Event.wrap("playerDeath", playerId);
         getLevelContext().triggerEvent(ev);
+    }
 
-        return damageValue;
-//        return 0;
+    public int getBulletSlotsCount() {
+        return bulletSlotBase +
+                (int) extra.getOrDefault("addBulletSlot", 0);
     }
 
     /**
