@@ -1,12 +1,11 @@
 package com.yotwei.battlecity.framework;
 
-import com.yotwei.battlecity.framework.stage.BootstrapStage;
+import com.yotwei.battlecity.framework.stage.EntryStage;
 import com.yotwei.battlecity.framework.stage.IStage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.time.temporal.ValueRange;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,14 +17,14 @@ public class App extends JFrame {
     private AppPanel panel;
     private Dimension winSize;
 
-    public App(BootstrapStage bootstrap, Dimension winSize) {
+    public App(EntryStage bootstrap, Dimension winSize) {
         this.panel = new AppPanel(bootstrap, winSize);
         this.winSize = winSize;
     }
 
     private void init() {
 
-        // set init properties
+        // 初始化窗口属性
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(winSize);
         this.setLocation(
@@ -33,26 +32,27 @@ public class App extends JFrame {
                 Toolkit.getDefaultToolkit().getScreenSize().height - winSize.height >> 1);
         this.add(panel);
 
-        // disable resize
+        // 禁止改变尺寸
         this.setResizable(false);
         this.setUndecorated(true);
 
-        // set to visible
+        // 展现
         this.setVisible(true);
 
-        // add mouse listener
+        // 添加家鼠标事件
         MouseActionAdapter adapter = new MouseActionAdapter();
         this.addMouseListener(adapter);
         this.addMouseMotionListener(adapter);
 
-        // add keyboard listener
+        // 添加键盘事件
         this.addKeyListener(new KeyboardListener());
     }
 
     public void start() {
-        this.init();
+        init();
 
-        this.panel.loop();
+        panel.putVar("_WinSize", winSize);
+        panel.loop();
     }
 
     public void clear() {
@@ -69,7 +69,7 @@ public class App extends JFrame {
 
         private Map<String, Object> varsMap;
 
-        AppPanel(BootstrapStage bootstrap, Dimension panelSize) {
+        AppPanel(EntryStage bootstrap, Dimension panelSize) {
             this.stage = bootstrap;
             this.setSize(panelSize);
             this.varsMap = new HashMap<>();
@@ -90,21 +90,21 @@ public class App extends JFrame {
 
             for (; stage != null; ) {
 
-                // record the time
+                // 记录起始时间
                 execRecord = System.currentTimeMillis();
 
-                // do update
+                // 更新
                 stage.update(this);
 
-                // do draw
+                // 绘制
                 drawFinished = false;
                 this.repaint();
 
-                // waiting for draw finished
+                // 绘制方法开启新的线程，因此需要等待绘制完成
                 // noinspection StatementWithEmptyBody
                 for (; !drawFinished; ) ;
 
-                // get execute cost
+                // 获取这一帧的开销
                 execCost = System.currentTimeMillis() - execRecord;
                 if (execCost < SLEEP_INTERVAL) {
                     try {
@@ -114,10 +114,10 @@ public class App extends JFrame {
                     }
                 }
 
-                // get next handle stage
+                // 获取下一个处理场景
                 IStage next = stage.next();
 
-                if (next != stage) {    // stage change
+                if (next != stage) {    // 场景发生了改变
                     stage.onFinished(this);
 
                     stage = next;
@@ -142,9 +142,8 @@ public class App extends JFrame {
     }
 
     /**
-     * mouse action listener
-     * <p>
-     * window could be moved while mouse dragging on window
+     * 鼠标事件监听器
+     * 监听拖拽事件，实现拖拽窗口
      */
     private class MouseActionAdapter
             implements MouseListener, MouseMotionListener {

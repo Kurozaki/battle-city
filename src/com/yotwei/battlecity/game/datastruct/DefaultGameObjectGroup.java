@@ -1,6 +1,7 @@
 package com.yotwei.battlecity.game.datastruct;
 
-import com.yotwei.battlecity.game.object.GameObject;
+import com.yotwei.battlecity.game.objects.GameObject;
+import com.yotwei.battlecity.util.GameObjects;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -9,53 +10,57 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Created by YotWei on 2019/2/28.
+ * Created by YotWei on 2019/3/18.
  */
-public class DefaultGameObjectGroup<_ObjectType extends GameObject>
-        implements IGameObjectGroup<_ObjectType> {
+public class DefaultGameObjectGroup implements IGameObjectGroup {
 
-    private Set<_ObjectType> objectSet;
+    private Set<GameObject> set;
 
-    DefaultGameObjectGroup() {
-        objectSet = new HashSet<>();
+    public DefaultGameObjectGroup() {
+        set = new HashSet<>();
     }
 
     @Override
-    public boolean add(_ObjectType anObject) {
-        return objectSet.add(anObject);
+    public boolean add(GameObject go) {
+        return set.add(go);
     }
 
     @Override
-    public boolean remove(_ObjectType anObject) {
-//        return objectSet.remove(anObject);
-        throw new UnsupportedOperationException("Unsupported method remove()");
-    }
-
-    @SuppressWarnings("Duplicates")
-    @Override
-    public int each(Consumer<_ObjectType> consumer) {
-
-        Iterator<_ObjectType> itr = objectSet.iterator();
-        while (itr.hasNext()) {
-            _ObjectType anObject = itr.next();
-            if (anObject.isActive()) {
-                consumer.accept(anObject);
-            } else {
-                itr.remove();
-            }
-        }
-
-        return objectSet.size();
+    public boolean remove(GameObject go) {
+        return set.remove(go);
     }
 
     @Override
-    public Set<_ObjectType> retrieve(Rectangle retArea) {
-        Set<_ObjectType> resultSet = new HashSet<>();
-        for (_ObjectType anObject : objectSet) {
-            if (anObject.isActive() && anObject.getHitbox().intersects(retArea))
+    public Set<GameObject> retrieve(Rectangle retrieveArea) {
+        Set<GameObject> resultSet = new HashSet<>();
+
+        // 集合逐个遍历，然后找到与矩形区域有交集的物体
+        for (GameObject anObject : set) {
+            if (anObject.isActive() &&
+                    GameObjects.boundingBox(anObject).intersects(retrieveArea)) {
                 resultSet.add(anObject);
+            }
         }
         return resultSet;
     }
 
+    @SuppressWarnings("Duplicates")
+    @Override
+    public void each(Consumer<GameObject> consumer) {
+        Iterator<GameObject> itr = set.iterator();
+
+        while (itr.hasNext()) {
+            GameObject go = itr.next();
+            if (go.isActive()) {
+                consumer.accept(go);
+            } else {
+                itr.remove();
+            }
+        }
+    }
+
+    @Override
+    public int size() {
+        return set.size();
+    }
 }

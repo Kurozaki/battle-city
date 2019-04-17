@@ -1,124 +1,125 @@
 package com.yotwei.battlecity.game.datastruct;
 
-import com.yotwei.battlecity.game.object.GameObject;
+import com.yotwei.battlecity.game.objects.GameObject;
+import com.yotwei.battlecity.util.GameObjects;
 
 import java.awt.*;
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Created by YotWei on 2019/3/3.
- * <p>
- * Grid is a special quad-tree
+ * Created by YotWei on 2019/3/23.
  */
-public class GridGameObjectGroup<_ObjectType extends GameObject>
-        implements IGameObjectGroup<_ObjectType> {
+public class GridGameObjectGroup implements IGameObjectGroup {
 
-    private final Array2D<Set<_ObjectType>> array2d;
-    private final Set<_ObjectType> objectSet;
-    private final Set<_ObjectType> removeSet;
-
+    private final Dimension unitSize;
     private final Rectangle boundary;
 
-    private final Dimension gridUnitSize;
+    private final Array2D<Set<GameObject>> grid;
+    private final Set<GameObject> set;
 
-    GridGameObjectGroup(Rectangle bound, int row, int col) {
-        this.boundary = bound;
 
-        // calculate grid unit size
-        gridUnitSize = new Dimension(boundary.width / col, boundary.height / row);
+    public GridGameObjectGroup(Rectangle boundary, int col, int row) {
+        this.boundary = boundary;
+        unitSize = new Dimension(boundary.width / col, boundary.height / row);
 
-        if (gridUnitSize.width * col < bound.width) col++;
-        if (gridUnitSize.height * row < bound.height) row++;
+        if (unitSize.width * col < boundary.width) col++;
+        if (unitSize.height * row < boundary.height) row++;
 
-        array2d = new Array2D<>(row, col);
-        objectSet = new HashSet<>();
-        removeSet = new HashSet<>();
-    }
-
-    @Override
-    public boolean add(_ObjectType anObject) {
-        if (!boundary.intersects(anObject.getHitbox())
-                || objectSet.contains(anObject)) {
-            return false;
+        grid = new Array2D<>(row, col);
+        for (int r = 0; r < grid.getRowCount(); r++) {
+            for (int c = 0; c < grid.getColCount(); c++) {
+                grid.set(r, c, new HashSet<>());
+            }
         }
 
-        calcIndexRect(anObject.getHitbox()).itr(aGridObjectSet -> aGridObjectSet.add(anObject));
-        objectSet.add(anObject);
-
-        return true;
+        set = new HashSet<>();
     }
 
     @Override
-    public boolean remove(_ObjectType anObject) {
-        return removeSet.add(anObject);
+    public boolean add(GameObject go) {
+        if (set.contains(go)) {
+            return false;
+        }
+        calcAccessRange(GameObjects.boundingBox(go))
+                .each(aSet -> aSet.add(go));
+        return set.add(go);
+    }
+
+    @Override
+    public boolean remove(GameObject go) {
+        if (!set.contains(go)) {
+            return false;
+        }
+        calcAccessRange(GameObjects.boundingBox(go)).each(aSet -> aSet.remove(go));
+        return set.remove(go);
+    }
+
+    @Override
+    public Set<GameObject> retrieve(Rectangle retrieveArea) {
+        Set<GameObject> resultSet = new HashSet<>();
+        calcAccessRange(retrieveArea).each(aSet -> aSet.forEach(anObject -> {
+            if (anObject.isActive() &&
+                    GameObjects.boundingBox(anObject).intersects(retrieveArea)) {
+                resultSet.add(anObject);
+            }
+        }));
+        return resultSet;
     }
 
     @SuppressWarnings("Duplicates")
     @Override
-    public int each(Consumer<_ObjectType> consumer) {
-
-        Iterator<_ObjectType> itr = objectSet.iterator();
+    public void each(Consumer<GameObject> consumer) {
+        Iterator<GameObject> itr = set.iterator();
         while (itr.hasNext()) {
-            _ObjectType anObject = itr.next();
-            if (anObject.isActive() && !removeSet.contains(anObject)) {
-                consumer.accept(anObject);
+            GameObject next = itr.next();
+            if (next.isActive()) {
+                consumer.accept(next);
             } else {
                 itr.remove();
-                calcIndexRect(anObject.getHitbox()).itr(aGridObjectSet -> {
-                    aGridObjectSet.remove(anObject);
-                });
+
+                // 还需要从格子中删除
+                calcAccessRange(GameObjects.boundingBox(next))
+                        .each(aGridSet -> aGridSet.remove(next));
             }
         }
-        return objectSet.size();
     }
 
     @Override
-    public Set<_ObjectType> retrieve(Rectangle retArea) {
-
-        Set<_ObjectType> resultSet = new HashSet<>();
-
-        calcIndexRect(retArea).itr(aGridObjectSet -> {
-            for (_ObjectType anObject : aGridObjectSet) {
-                if (!anObject.getHitbox().intersects(retArea)) {
-                    continue;
-                }
-                resultSet.add(anObject);
-            }
-        });
-
-        return resultSet;
+    public int size() {
+        return set.size();
     }
 
-    private IndexRect calcIndexRect(Rectangle area) {
-        IndexRect ir = new IndexRect();
-        ir.x1 = (area.x - boundary.x) / gridUnitSize.width;
-        ir.x2 = (area.x + area.width - 1 - boundary.x) / gridUnitSize.width;
-        ir.y1 = (area.y - boundary.y) / gridUnitSize.height;
-        ir.y2 = (area.y + area.height - 1 - boundary.y) / gridUnitSize.height;
-        return ir;
+    private AccessRange calcAccessRange(Rectangle rc) {
+        rc = rc.intersection(boundary);
+        return new AccessRange(
+                rc.x / unitSize.width,
+                rc.y / unitSize.height,
+                (rc.x + rc.width - 1) / unitSize.width,
+                (rc.y + rc.height - 1) / unitSize.height
+        );
     }
 
-    private class IndexRect {
+    private class AccessRange {
 
-        int x1, x2, y1, y2;
+        final int fromX, fromY, toX, toY;
 
-        void itr(Consumer<Set<_ObjectType>> c) {
-
-            for (int y = y1; y <= y2; y++) {
-                for (int x = x1; x <= x2; x++) {
-
-                    if (!array2d.isInRange(y, x))
-                        continue;
-
-                    if (array2d.get(y, x) == null)
-                        array2d.set(y, x, new HashSet<>());
-
-                    c.accept(array2d.get(y, x));
-                }
-            }
-
+        AccessRange(int fromX, int fromY, int toX, int toY) {
+            this.fromX = fromX;
+            this.fromY = fromY;
+            this.toX = toX;
+            this.toY = toY;
         }
 
+        void each(Consumer<Set<GameObject>> c) {
+            for (int x = fromX; x <= toX; x++) {
+                for (int y = fromY; y <= toY; y++) {
+                    c.accept(grid.get(y, x));
+                }
+            }
+        }
     }
 }
