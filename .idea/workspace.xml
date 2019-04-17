@@ -2,194 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b345716f-cdd7-4e33-a2a7-99103b47f9fe" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Yotwei.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Yotwei.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/_test/Test.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/_test/Test.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/client/Client$1.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/client/Client$1.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/client/Client.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/client/Client.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App$AppPanel.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App$AppPanel.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App$KeyboardListener.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App$KeyboardListener.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App$MouseActionAdapter.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App$MouseActionAdapter.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/App.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/framework/stage/BootstrapStage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/Array2D.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/Array2D.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/DefaultGameObjectGroup.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/DefaultGameObjectGroup.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/GridGameObjectGroup$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/GridGameObjectGroup$IndexRect.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/GridGameObjectGroup.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/GridGameObjectGroup.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/IGameObjectGroup.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/datastruct/IGameObjectGroup.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/engine/GameContext.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/engine/ResourcePackage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/LevelPackage$LevelData.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/LevelPackage$PlayerData.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/LevelPackage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/decoder/ILevelDecoder.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/decoder/ILevelPackageDecoder.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/decoder/LevelDecoderV1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/level/decoder/LevelPackageDecoderV1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/GameObject.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/GameObjectFactory.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/LevelContext$Event.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/LevelContext$RetrieveFilter.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/LevelContext.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/block/AbstractBlock.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/block/Eagle.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/block/Grass.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/block/IronBlock.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/block/RedBrick.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/block/River.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/AbstractBullet$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/AbstractBullet.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/ArmourPiercingBullet.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/BurstBullet$BurstFire.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/BurstBullet.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/FrozenBullet.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/bullet/GenericBullet.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/effect/Effect.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/AbstractItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/AddPlayerLiveItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/AddTankBulletSlotItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/ClearEnemyItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/FreezeEnemyItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/InvincibleItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/StrengthenEagleAroundBlockItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/item/TankSpeedUpItem.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/properties/BulletDamageAble.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/properties/Direction.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/properties/DrawAble.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/properties/LifeCycle.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/properties/Physic.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/special/SpecialObject.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/special/TankCreator.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/AbstractTank$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/AbstractTank.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/EnemyTank.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/PlayerTank$ControlKeys.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/PlayerTank.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/AbstractTankBulletProjection$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/AbstractTankBulletProjection.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/AbstractTankMovement.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/EnemyTankBulletDefaultProjection.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/EnemyTankMovement$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/EnemyTankMovement.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/PlayerTankBulletProjection.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/object/tank/behavior/PlayerTankMovement.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/player/Player.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/GameOverStage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/GameStage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/HeadlineStage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/PrepareStage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/scene/AbstractScene.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/scene/LevelClearer.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/scene/LevelHandler.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/scene/LevelPreviewer.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/game/stage/scene/LevelSwitcher.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/util/Constant.class" afterPath="$PROJECT_DIR$/out/production/battle-city/com/yotwei/battlecity/util/Constant.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/conf/animate.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/conf/blocks.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/conf/enemies.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/conf/pkeys.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/bg-1.JPG" afterPath="$PROJECT_DIR$/out/production/battle-city/graphics/bg-1.JPG" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/block-1.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/block-2.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/block-3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/block-4.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/effect-3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/player-1.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/special_protected.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/graphics/special_tank_creator.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/conf/animate.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/conf/blocks.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/conf/enemies.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/conf/pkeys.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/bg-1.JPG" afterPath="$PROJECT_DIR$/out/production/battle-city/res/graphics/bg-1.JPG" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/block-1.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/block-2.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/block-3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/block-4.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/effect-3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/player-1.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/special_protected.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/battle-city/res/graphics/special_tank_creator.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/_test/Test.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/client/Client.java" afterPath="$PROJECT_DIR$/src/com/yotwei/battlecity/client/Client.java" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/framework/App.java" afterPath="$PROJECT_DIR$/src/com/yotwei/battlecity/framework/App.java" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/framework/IStageHandleContext.java" afterPath="$PROJECT_DIR$/src/com/yotwei/battlecity/framework/IStageHandleContext.java" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/framework/stage/BootstrapStage.java" afterPath="$PROJECT_DIR$/src/com/yotwei/battlecity/framework/stage/EntryStage.java" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/datastruct/Array2D.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/datastruct/DefaultGameObjectGroup.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/datastruct/GridGameObjectGroup.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/datastruct/IGameObjectGroup.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/engine/GameContext.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/engine/ResourcePackage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/level/LevelPackage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/level/decoder/ILevelDecoder.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/level/decoder/ILevelPackageDecoder.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/level/decoder/LevelDecoderV1.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/level/decoder/LevelPackageDecoderV1.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/GameObject.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/GameObjectFactory.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/LevelContext.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/block/AbstractBlock.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/block/Eagle.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/block/Grass.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/block/IronBlock.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/block/RedBrick.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/block/River.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/bullet/AbstractBullet.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/bullet/ArmourPiercingBullet.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/bullet/BurstBullet.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/bullet/FrozenBullet.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/bullet/GenericBullet.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/effect/Effect.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/AbstractItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/AddPlayerLiveItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/AddTankBulletSlotItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/ClearEnemyItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/FreezeEnemyItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/InvincibleItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/StrengthenEagleAroundBlockItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/item/TankSpeedUpItem.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/properties/BulletDamageAble.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/properties/Direction.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/properties/DrawAble.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/properties/LifeCycle.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/properties/Physic.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/special/SpecialObject.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/special/TankCreator.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/AbstractTank.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/EnemyTank.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/PlayerTank.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/behavior/AbstractTankBulletProjection.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/behavior/AbstractTankMovement.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/behavior/EnemyTankBulletDefaultProjection.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/behavior/EnemyTankMovement.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/behavior/PlayerTankBulletProjection.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/object/tank/behavior/PlayerTankMovement.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/player/Player.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/GameOverStage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/GameStage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/HeadlineStage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/PrepareStage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/scene/AbstractScene.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/scene/LevelClearer.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/scene/LevelHandler.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/scene/LevelPreviewer.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/game/stage/scene/LevelSwitcher.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/com/yotwei/battlecity/util/Constant.java" afterPath="$PROJECT_DIR$/src/com/yotwei/battlecity/util/Constant.java" />
-      <change beforePath="$PROJECT_DIR$/src/res/conf/animate.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/conf/blocks.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/conf/enemies.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/conf/pkeys.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/bg-1.JPG" afterPath="$PROJECT_DIR$/src/res/graphics/bg-1.JPG" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/block-1.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/block-2.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/block-3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/block-4.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/effect-3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/player-1.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/special_protected.png" afterPath="$PROJECT_DIR$/src/res/graphics/special_guard.png" />
-      <change beforePath="$PROJECT_DIR$/src/res/graphics/special_tank_creator.png" afterPath="$PROJECT_DIR$/src/res/graphics/special_tank_spawn.png" />
+      <change beforePath="$PROJECT_DIR$/src/res/maps/default/level-1.json" afterPath="$PROJECT_DIR$/src/res/maps/default/level-1.json" />
+      <change beforePath="$PROJECT_DIR$/src/res/maps/default/level-2.json" afterPath="$PROJECT_DIR$/src/res/maps/default/level-2.json" />
+      <change beforePath="$PROJECT_DIR$/src/res/maps/default/level-3.json" afterPath="$PROJECT_DIR$/src/res/maps/default/level-3.json" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -212,11 +27,51 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="LevelHandler.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LevelHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/game/LevelHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="489" column="7" lean-forward="true" selection-start-line="489" selection-start-column="7" selection-end-line="489" selection-end-column="7" />
+            <state relative-caret-position="21">
+              <caret line="489" column="7" lean-forward="false" selection-start-line="489" selection-start-column="7" selection-end-line="489" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Test.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/_test/Test.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="level-1.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-1.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="level-2.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-2.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="level-3.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-3.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="5" column="26" lean-forward="false" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -352,15 +207,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tanks/spawn/TankSpawnPoint.java" />
-        <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/spawn/TankSpawnPoint.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tankspawn/PlayerTankSpawnPoint.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/GameController.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/util/Bundle.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tankspawn/TankSpawnPoint.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/EnemiesMonitor.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/ui/UIObject.java" />
-        <option value="$PROJECT_DIR$/src/res/maps/default/level-1.json" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/util/GameObjects.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tiles/DecorateTile.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tiles/BGO.java" />
@@ -387,7 +239,6 @@
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tiles/Block.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tiles/Eagle.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/components/tank/TankBulletLauncherEnemy.java" />
-        <option value="$PROJECT_DIR$/src/res/maps/default/level-2.json" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/components/bullet/BulletMotion.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/bullet/Bullet.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tanks/EnemyTank.java" />
@@ -403,6 +254,10 @@
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/GameObject.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/components/item/ItemAddBulletSlotCollisionListener.java" />
         <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/game/LevelHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/yotwei/battlecity/_test/Test.java" />
+        <option value="$PROJECT_DIR$/src/res/maps/default/level-1.json" />
+        <option value="$PROJECT_DIR$/src/res/maps/default/level-2.json" />
+        <option value="$PROJECT_DIR$/src/res/maps/default/level-3.json" />
       </list>
     </option>
   </component>
@@ -442,9 +297,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -695,7 +549,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1203,11 +1058,12 @@
       <workItem from="1555292133924" duration="6162000" />
       <workItem from="1555376361204" duration="2792000" />
       <workItem from="1555464452174" duration="679000" />
+      <workItem from="1555467062502" duration="161000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1359970000" />
+    <option name="totallyTimeSpent" value="1360131000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1220,6 +1076,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1376" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27710843" sideWeight="0.50303954" order="6" side_tool="true" content_ui="tabs" />
@@ -1239,10 +1096,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.383821" sideWeight="0.4969605" order="2" side_tool="false" content_ui="tabs" x="643" y="351" width="74" height="25" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32874355" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.383821" sideWeight="0.4969605" order="2" side_tool="false" content_ui="tabs" x="643" y="351" width="74" height="25" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41652325" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29179332" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2963526" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="JProfiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -1305,21 +1162,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tiles/block/Block04BulletHitListener.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/game/components/listeners/BulletHitListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/awt/AlphaComposite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="600" column="48" lean-forward="false" selection-start-line="600" selection-start-column="41" selection-end-line="600" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/game/objects/prefabs/tiles/BGO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -1455,9 +1297,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="29" column="61" lean-forward="false" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1505,13 +1344,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-2.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/game/components/tank/TankBulletLauncherEnemy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="489">
@@ -1523,7 +1355,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
           <caret line="35" column="5" lean-forward="false" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1538,7 +1369,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-810">
           <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1644,8 +1474,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/game/LevelHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="489" column="7" lean-forward="true" selection-start-line="489" selection-start-column="7" selection-end-line="489" selection-end-column="7" />
+        <state relative-caret-position="21">
+          <caret line="489" column="7" lean-forward="false" selection-start-line="489" selection-start-column="7" selection-end-line="489" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/yotwei/battlecity/_test/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-1.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-2.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="32" lean-forward="false" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/res/maps/default/level-3.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="26" lean-forward="false" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
           <folding />
         </state>
       </provider>
